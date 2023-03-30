@@ -1,30 +1,103 @@
 import logo from '../logo.svg';
 import '../App.css';
-import { createTheme, Grid, Paper, ThemeProvider } from '@mui/material';
-import { dark } from '@mui/material/styles/createPalette';
+import { Button, createTheme, Grid, Paper, ThemeProvider } from '@mui/material';
+import Login from './Login';
+import Signup from './Signup';
 
 const theme = createTheme({
   palette: {
     primary: {
 		light:"#426915",
 		dark:"#a7d474",
-      	main: '#23370b',
+    	main: '#23370b',
     },
+	onPrimary: {
+		light: "#ffffff",
+		main: "#ffffff",
+		dark: "#1e3700"
+	},
     secondary: {
 		light:"#57624a",
 		dark:"#bfcbad",
       	main: '#3c4433',
     },
+	onSecondary: {
+		light: "#ffffff",
+		dark: "#2a331e",
+		main: "#ffffff"
+	},
+	tertiary: {
+		main: "#386663",
+		light: "#386663",
+		dark: "#a0cfcc",
+	},
+	onTertiary: {
+		main: "#ffffff",
+		light: "#ffffff",
+		dark: "#003735"
+	},
 	error: {
 		light: "#ba1a1a",
 		dark: "#ffb4ab",
 		main: "#f44336"
 	},
-	accent: {
-		main: "#386663",
-		light: "#386663",
-		dark: "#a0cfcc"
-	}
+	onError: {
+		light: "#ffffff",
+		main: "#ffffff",
+		dark: "#ffffff"
+	},
+	primaryContainer: {
+		light: "#c2f18d",
+		main: "#c2f18d",
+		dark: "#2d5000"
+	},
+	onPrimaryContainer: {
+		light: "#0f2000",
+		main: "#0f2000",
+		dark: "#0f2000",
+	},
+	secondaryContainer: {
+		light: "#dbe7c8",
+		main: "#dbe7c8",
+		dark: "#404a33"
+	},
+	onSecondaryContainer: {
+		light: "#151e0b",
+		main: "#151e0b",
+		dark: "#dbe7c8",
+	},
+	tertiaryContainer: {
+		light: "#bbece8",
+		main: "#bbece8",
+		dark: "#bbece8"
+	},
+	onTertiaryContainer: {
+		light: "#00201f",
+		main: "#00201f",
+		dark: "#bbece8"
+	},
+	errorContainer: {
+		light: "#ffdad6",
+		main: "#ffdad6",
+		dark: "#93000a",
+	},
+	onErrorContainer: {
+		light: "#410002",
+		main: "#410002",
+		dark: "#ffdad6"
+	},
+	background: {
+		light: "#fdfcf5",
+		main: "#fdfcf5",
+		dark: "#fdfcf5"
+	},
+	onBackground: {
+		light: "#1b1c18",
+		main: "#1b1c18",
+		dark: "#e3e3db"
+	},
+	contrastThreshold: 3,
+	tonalOffset: 0.2
   },
   typography: {
     fontFamily: [
@@ -39,25 +112,7 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-            <header className="App-header">
-				<Paper>
-					<p>asdfhjasdhfkjasdhfjkas</p>
-				</Paper>
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
-            </header>
-          </div>
+      	<Signup></Signup>
     </ThemeProvider>
     
   );
