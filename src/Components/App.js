@@ -1,8 +1,17 @@
 import logo from '../logo.svg';
 import '../App.css';
-import { Button, createTheme, Grid, Paper, ThemeProvider } from '@mui/material';
+import { Button, createTheme, Grid, Paper, ThemeProvider, } from '@mui/material';
+import {
+	NavLink,
+	BrowserRouter as Router,
+	Link,
+	Route,
+	Routes
+} from 'react-router-dom';
 import Login from './Login';
 import Signup from './Signup';
+import Tracking from './Tracking';
+import Navbar from './Navbar';
 
 const theme = createTheme({
   palette: {
@@ -109,10 +118,18 @@ const theme = createTheme({
     fontSize: 16,
   },
 });
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      	<Signup></Signup>
+			<Router>
+				<Navbar />
+				<Routes>
+				<Route path='/signup' element={<Signup />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/tracking' element={<Tracking />} />
+				</Routes>
+			</Router>
     </ThemeProvider>
     
   );
