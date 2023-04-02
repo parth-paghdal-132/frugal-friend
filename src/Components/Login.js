@@ -4,8 +4,14 @@ import React, { useCallback, useState } from "react";
 import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
 import authValidations from "../helpers/authValidations"
 import axiosInstance from "../config/axiosConfig"
+import { GoogleAuthProvider, getAuth, signInWithPopup, signOut } from 'firebase/auth'
+import fireabseApp from '../firebase/Firebase'
 
 const SIGNUP_SOURCE_APP = "app"
+const SIGNUP_SOURCE_GOOGLE = "google"
+
+const provider = new GoogleAuthProvider()
+const auth = getAuth(fireabseApp)
 
 function Login(props){
 
@@ -47,7 +53,7 @@ function Login(props){
             showErrorData(exception)
         }
         if(isDataValid) {
-            makeAuthenticateUserApiCall()
+            makeAuthenticateUserApiCall(email, password, SIGNUP_SOURCE_APP)
         }
     }
 
@@ -57,26 +63,27 @@ function Login(props){
         setOtherError(errors.other)
     }
 
-    async function makeAuthenticateUserApiCall() {
+    async function makeAuthenticateUserApiCall(email, password, source) {
         setApiCallState({...apiCallState, loading:true})
         try {
             const response = await axiosInstance.post("auth/login",{
                 email: email,
                 password: password,
-                signUpSource: SIGNUP_SOURCE_APP
+                source: source
             })
             setApiCallState({...apiCallState, loading:false})
-            console.log(response)
             if(response.status === 200) {
                 if(response.data.email) {
                     localStorage.setItem("token", response.data.token)
                     navigate("/", { replace: true }, 1)
                 } else {
                     showErrorData({other: "Could not log you in at this moment please try after some time."})
+                    signOut(auth)
                 }
             }
         } catch(exception) {
             setApiCallState({...apiCallState, loading:false})
+            signOut(auth)
             if(exception.response && exception.response.data){
                 showErrorData(exception.response.data)
             } else {
@@ -85,8 +92,17 @@ function Login(props){
         }
     }
 
-    function loginWithGoogle(){
-        console.log("perform login with google")
+    async function loginWithGoogle(){
+        try {
+            let result = await signInWithPopup(auth, provider)
+            if(result.user){
+                makeAuthenticateUserApiCall(result.user.email, null, SIGNUP_SOURCE_GOOGLE)
+            } else {
+                showErrorData({other: "Could not log you in at this moment please try after some time."})
+            }
+        } catch(exception) {
+            showErrorData({other: "Could not log you in at this moment please try after some time."})
+        }
     }
 
     let token = localStorage.getItem("token")
@@ -134,7 +150,7 @@ function Login(props){
                                     onChange={handlePasswordChange}
                                     aria-describedby="passwordInfo"
                                     id="password"
-                                    fullWidth="true"
+                                    fullWidth={true}
                                     type={showPassword ? "text" : "password"}
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -154,13 +170,13 @@ function Login(props){
                             </FormControl>
                         </Grid>       
                         <Grid item xs={12} sx={{mt:3}}>
-                            <Button fullWidth="true" variant="contained" id="signup" name="signup" type="submit" disabled={apiCallState.loading}>{apiCallState.loading ? "Loggin in" : "Log in"}</Button>
+                            <Button fullWidth={true} variant="contained" id="signup" name="signup" type="submit" disabled={apiCallState.loading}>{apiCallState.loading ? "Loggin in" : "Log in"}</Button>
                         </Grid>  
                         <Grid item xs={12} sx={{mt:3}}>
                             <Divider orientation="horizontal"></Divider>
                         </Grid>
                         <Grid item xs={12} sx={{mt:5}}>
-                            <Button fullWidth="true"  variant="contained" onClick={loginWithGoogle} disabled={apiCallState.loading}>Login with Google</Button>
+                            <Button fullWidth={true} variant="contained" onClick={loginWithGoogle} disabled={apiCallState.loading}>Login with Google</Button>
                         </Grid>
                         <Grid item xs={12} sx={{mt:5}}>
                             <Typography variant="body1" component="p">Do not have an account? <NavLink to="/auth/signup">Sign up here</NavLink></Typography>

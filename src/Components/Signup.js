@@ -4,10 +4,16 @@ import React, { useCallback, useState } from "react";
 import { NavLink, useNavigate, Navigate } from "react-router-dom"
 import authValidations from "../helpers/authValidations"
 import axiosInstance from "../config/axiosConfig"
+import { GoogleAuthProvider, signInWithPopup, signOut, getAuth } from "firebase/auth";
+import fireabseApp from '../firebase/Firebase'
 
 const USERNAME_INFO = "Your username should be at least 6 character long and should contain alphabets and number."
 const PASSWORD_INFO = "Your password should be at least 8 character long and should contain at least one uppercase, one lowercase, one number and one special character."
 const SIGNUP_SOURCE_APP = "app"
+const SIGNUP_SOURCE_GOOGLE = "google"
+
+const provider = new GoogleAuthProvider()
+const auth = getAuth(fireabseApp)
 
 function Signup(){
 
@@ -67,10 +73,6 @@ function Signup(){
         setShowConfirmPassword((show) => !show)
     }
 
-    function signWithGoogle() {
-
-    }
-
     function handleSubmit(event) {
         if(apiCallState.loading) return
         event.preventDefault()
@@ -97,7 +99,7 @@ function Signup(){
                 username: username,
                 password: password,
                 confirmPassword: confirmPassword,
-                signUpSource: SIGNUP_SOURCE_APP
+                source: SIGNUP_SOURCE_APP
             })
             setApiCallState({...apiCallState, loading:false})
             console.log(response)
@@ -140,6 +142,48 @@ function Signup(){
         } else {    
             setTxtConfirmaPasswordSuccess("")
             setTxtConfirmPasswordError("Confirm password do not match with password.")
+        }
+    }
+
+    async function makeAuthenticateUserApiCall(email, password, source) {
+        setApiCallState({...apiCallState, loading:true})
+        try {
+            const response = await axiosInstance.post("auth/login",{
+                email: email,
+                password: password,
+                source: source
+            })
+            setApiCallState({...apiCallState, loading:false})
+            if(response.status === 200) {
+                if(response.data.email) {
+                    localStorage.setItem("token", response.data.token)
+                    navigate("/", { replace: true }, 1)
+                } else {
+                    showErrorData({other: "Could not log you in at this moment please try after some time."})
+                    signOut(auth)
+                }
+            }
+        } catch(exception) {
+            setApiCallState({...apiCallState, loading:false})
+            signOut(auth)
+            if(exception.response && exception.response.data){
+                showErrorData(exception.response.data)
+            } else {
+                showErrorData({other: "Could not log you in at this moment please try after some time."})
+            }
+        }
+    }
+
+    async function loginWithGoogle(){
+        try {
+            let result = await signInWithPopup(auth, provider)
+            if(result.user){
+                makeAuthenticateUserApiCall(result.user.email, null, SIGNUP_SOURCE_GOOGLE)
+            } else {
+                showErrorData({other: "Could not log you in at this moment please try after some time."})
+            }
+        } catch(exception) {
+            showErrorData({other: "Could not log you in at this moment please try after some time."})
         }
     }
 
@@ -299,7 +343,7 @@ function Signup(){
                             <Divider orientation="horizontal"></Divider>
                         </Grid>
                         <Grid item xs={12} sx={{mt:5}}>
-                            <Button fullWidth="true" variant="contained" onClick={signWithGoogle} disabled={apiCallState.loading}>Signup with Google</Button>
+                            <Button fullWidth="true" variant="contained" onClick={loginWithGoogle} disabled={apiCallState.loading}>Signup with Google</Button>
                         </Grid>
                         <Grid item xs={12} sx={{mt:5}}>
                             <Typography variant="body1" component="p">Already have an account? <NavLink to="/auth/login">Login here</NavLink></Typography>

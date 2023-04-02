@@ -6,7 +6,7 @@ const xss = require("xss")
 
 const users = mongoCollections.users
 
-const createUser = async (firstName, lastName, email, username, password, confirmPassword, signUpSource) => {
+const createUser = async (firstName, lastName, email, username, password, confirmPassword, source) => {
     let errors = {}
     firstName = xss(firstName).trim()
     lastName = xss(lastName).trim()
@@ -15,7 +15,7 @@ const createUser = async (firstName, lastName, email, username, password, confir
     password = xss(password).trim()
     confirmPassword = xss(confirmPassword).trim()
 
-    authValidations.validateCreateUserData(firstName, lastName, email, username, password, confirmPassword, signUpSource, errors)
+    authValidations.validateCreateUserData(firstName, lastName, email, username, password, confirmPassword, source, errors)
 
     const userCollection = await users()
     const exist = await userCollection.findOne({ $or: [{ email }, { username }] })
@@ -34,7 +34,7 @@ const createUser = async (firstName, lastName, email, username, password, confir
         email: email,
         password: hashedPassword,
         username: username,
-        signUpSource: signUpSource
+        source: source
     })
     if(!insertInfo.acknowledged || !insertInfo.insertedId){
         errors.other = "Could not create user at this moment please try after some time."
@@ -46,13 +46,35 @@ const createUser = async (firstName, lastName, email, username, password, confir
     return {data: user, code: 200}
 }
 
-const authenticateUser = async (email, password, loginSource) => {
+const createUserWithEmail = async (email, source) => {
+    let errors = {}
+    email = xss(email).trim()
+    source = xss(source).trim()
+
+    authValidations.validateGoogleLoginData(email, source, errors)
+
+    const userCollection = await users()
+    const insertInfo = await userCollection.insertOne({
+        email: email,
+        source: source
+    })
+    if(!insertInfo.acknowledged || !insertInfo.insertedId){
+        errors.other = "Could not create user at this moment please try after some time."
+        errors.code = 500
+        throw errors
+    }
+
+    let user = await getUser(insertInfo.insertedId.toString())
+    return user
+}
+
+const authenticateUser = async (email, password, source) => {
     let errors = {}
     email = xss(email).trim()
     password = xss(password).trim()
-    loginSource = xss(loginSource).trim()
+    source = xss(source).trim()
 
-    authValidations.validateAuthenticateUser(email, password, loginSource, errors)
+    authValidations.validateAuthenticateUser(email, password, source, errors)
 
     let user = await getUserByEmail(email)
     const isMatch = await bcrypt.compare(password, user.password)
@@ -62,6 +84,22 @@ const authenticateUser = async (email, password, loginSource) => {
         throw errors
     }
     return {data:user, code: 200}
+}
+
+const authenticateGoogleUser = async (email, source) => {
+    let errors = {}
+    email = xss(email).trim()
+    source = xss(source).trim()
+
+    authValidations.validateGoogleLoginData(email, source, errors)
+
+    const userCollection = await users()
+    const user = await userCollection.findOne({email: email})
+    if(user) {
+        return {data:user, code: 200}
+    }
+    let newUser = await createUserWithEmail(email, source)
+    return {data:newUser, code: 200}
 }
 
 const getUser = async (userId) => {
@@ -96,5 +134,6 @@ const getUserByEmail = async (email) => {
 
 module.exports = {
     createUser,
-    authenticateUser
+    authenticateUser,
+    authenticateGoogleUser
 }
