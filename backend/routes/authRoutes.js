@@ -12,6 +12,12 @@ router
     .post(async (req, res) => {
         let errors = {}
 
+        if(req.session.user) {
+            errors.other = "You are already logged in."
+            errors.code = 403
+            return res.status(errors.code).json(errors)
+        }
+
         let firstName = xss(req.body.firstName).trim()
         let lastName = xss(req.body.lastName).trim()
         let email = xss(req.body.email).trim()
@@ -33,6 +39,7 @@ router
         try {
             let user = await authData.createUser(firstName, lastName, email, username, password, confirmPassword, signUpSource)
             if(user && user.data) {
+                delete user.data.password
                 return res.status(user.code).json(user.data)
             } else {
                 return res.status(500).json({other: "Can not create user at this moment please try after some time."})
@@ -50,6 +57,11 @@ router
     .route("/login")
     .post(async (req, res) => {
         let errors = {}
+        if(req.session.user) {
+            errors.other = "You are already logged in."
+            errors.code = 403
+            return res.status(errors.code).json(errors)
+        }
 
         let email = xss(req.body.email).trim()
         let password = xss(req.body.password).trim()
@@ -68,6 +80,9 @@ router
         try {
             let user = await authData.authenticateUser(email, password, loginSource)
             if(user && user.data) {
+                delete user.data.password
+                req.session.user = user.data
+                user.data.token = req.session.id
                 return res.status(200).json(user.data)
             } else {
                 return res.status(500).json({other: "Can not log you in at this moment. Please try after some time."})

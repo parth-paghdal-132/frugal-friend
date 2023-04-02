@@ -1,8 +1,8 @@
-import logo from '../logo.svg';
 import '../App.css';
-import { Button, createTheme, Grid, Paper, ThemeProvider } from '@mui/material';
-import Login from './Login';
+import { createTheme, ThemeProvider } from '@mui/material';
 import Signup from './Signup';
+import Login from './Login';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -110,12 +110,16 @@ const theme = createTheme({
   },
 });
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      	<Signup></Signup>
-    </ThemeProvider>
-    
-  );
+  	return (
+		<ThemeProvider theme={theme}>
+			<Router>
+				<Routes>
+					<Route path='/auth/signup' element={<Signup />} />
+					<Route path='/auth/login' element={<Login />} />
+				</Routes>
+			</Router>
+    	</ThemeProvider>
+  	);
 }
 
 export default App;
