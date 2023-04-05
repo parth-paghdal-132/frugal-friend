@@ -25,7 +25,7 @@ function Login(props){
     const [txtEmailError, setTxtEmailError] = useState(null)
     const [password, setPassword] = useState("")
     const [txtPasswordError, setTxtPasswordError] = useState(null)
-    const [otherError, setOtherError] = useState("")
+    const [otherError, setOtherError] = useState(props.otherError)
 
     const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
 

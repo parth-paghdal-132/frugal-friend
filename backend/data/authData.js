@@ -21,7 +21,7 @@ const createUser = async (firstName, lastName, email, username, password, confir
     const exist = await userCollection.findOne({ $or: [{ email }, { username }] })
     if(exist) {
         errors.other = "Either the email or username exists."
-        errors.code = 400
+        errors.code = 409
         throw errors
     }
 
@@ -135,5 +135,7 @@ const getUserByEmail = async (email) => {
 module.exports = {
     createUser,
     authenticateUser,
-    authenticateGoogleUser
+    authenticateGoogleUser,
+    getUserByEmail,
+    getUser
 }

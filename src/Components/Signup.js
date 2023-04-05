@@ -102,7 +102,6 @@ function Signup(){
                 source: SIGNUP_SOURCE_APP
             })
             setApiCallState({...apiCallState, loading:false})
-            console.log(response)
             if(response.status === 200) {
                 if(response.data.email) {
                     navigate("/auth/login", {state:{ email:response.data.email}, replace: true }, 1)
@@ -222,7 +221,7 @@ function Signup(){
                                                 <Person></Person>
                                             </InputAdornment>
                                     }/>
-                                    <FormHelperText id="firstNameInfo">{txtFirstNameError ? txtFirstNameError : ""}</FormHelperText>
+                                    <FormHelperText id="firstNameInfo">{txtFirstNameError}</FormHelperText>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6} sx={{mt:4}}>
@@ -239,11 +238,11 @@ function Signup(){
                                                 <Person></Person>
                                             </InputAdornment>
                                     }/>
-                                    <FormHelperText id="lastNameInfo">{txtLastnameError ? txtLastnameError : ""}</FormHelperText>
+                                    <FormHelperText id="lastNameInfo">{txtLastnameError}</FormHelperText>
                                 </FormControl>
                             </Grid>
                         </Grid>
-                        <Grid item xs={12} sx={{mt:4}}>
+                        <Grid item xs={12} sx={{mt:3}}>
                             <FormControl sx={{width:"100%"}} error={txtEmailError}>
                                 <InputLabel htmlFor="email">Email Address</InputLabel>
                                 <Input 
@@ -258,10 +257,10 @@ function Signup(){
                                             <Email></Email>
                                         </InputAdornment>
                                 }/>
-                                <FormHelperText id="emailInfo">{txtEmailError ? txtEmailError : ""}</FormHelperText>
+                                <FormHelperText id="emailInfo">{txtEmailError}</FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sx={{mt:4}}>
+                        <Grid item xs={12} sx={{mt:3}}>
                             <FormControl sx={{width:"100%"}} error={txtUsernameError}>
                                 <InputLabel htmlFor="username">Username</InputLabel>
                                 <Input 
@@ -276,7 +275,7 @@ function Signup(){
                                             <Person></Person>
                                         </InputAdornment>
                                 }/>
-                                <FormHelperText id="usernameInfo">{txtUsernameError ? txtUsernameError : ""}</FormHelperText>
+                                <FormHelperText id="usernameInfo">{txtUsernameError}</FormHelperText>
                                 <FormHelperText id="usernameInstruction">{USERNAME_INFO}</FormHelperText>
                             </FormControl>
                         </Grid>
@@ -304,7 +303,7 @@ function Signup(){
                                             </IconButton>
                                         </InputAdornment>
                                 }/>
-                                <FormHelperText id="passwordInfo">{txtPasswordError ? txtPasswordError : ""}</FormHelperText>
+                                <FormHelperText id="passwordInfo">{txtPasswordError}</FormHelperText>
                                 <FormHelperText id="passwordInstruction">{PASSWORD_INFO}</FormHelperText>
                             </FormControl>
                         </Grid> 
@@ -333,7 +332,7 @@ function Signup(){
                                         </InputAdornment>
                                 }/>
                                 {txtConfirmaPasswordSuccess && <FormHelperText id="confirmPasswordInfo" sx={{color:"green"}}>Password match</FormHelperText>}
-                                <FormHelperText id="confirmPasswordInfo">{txtConfirmPasswordError ? txtConfirmPasswordError : ""}</FormHelperText>
+                                <FormHelperText id="confirmPasswordInfo">{txtConfirmPasswordError}</FormHelperText>
                             </FormControl>
                         </Grid> 
                         <Grid item xs={12} sx={{mt:3}}>

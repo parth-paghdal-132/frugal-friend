@@ -1,7 +1,6 @@
 const express = require("express")
 const xss = require("xss")
 const authValidations = require("../helpers/authValidations")
-const { ObjectId } = require("mongodb")
 const data = require("../data")
 
 const router = express.Router()

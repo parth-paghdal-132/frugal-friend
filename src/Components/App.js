@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Signup from './Signup';
 import Login from './Login';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import MyProfile from './MyProfile';
 
 const theme = createTheme({
   palette: {
@@ -116,6 +117,7 @@ function App() {
 				<Routes>
 					<Route path='/auth/signup' element={<Signup />} />
 					<Route path='/auth/login' element={<Login />} />
+					<Route path='/myprofile' element={<MyProfile/>} />
 				</Routes>
 			</Router>
     	</ThemeProvider>
