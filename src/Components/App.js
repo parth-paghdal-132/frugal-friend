@@ -5,6 +5,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Navigation from "./Navigation";
 import Home from "./Home";
+import MyProfile from "./MyProfile";
 
 const theme = createTheme({
   palette: {
@@ -107,21 +108,25 @@ const theme = createTheme({
   },
 });
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <Navigation></Navigation>
-        </header>
-      </div>
-      <div>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </div>
-    </Router>
+  	return (
+		<ThemeProvider theme={theme}>
+      	<Router>
+      		<div className="App">
+				<header className="App-header">
+					<Navigation></Navigation>
+				</header>
+      		</div>
+      		<div>
+				<Routes>
+					<Route exact path="/" element={<Home />} />
+					<Route path="/auth/signup" element={<Signup />} />
+					<Route path="/auth/login" element={<Login />} />
+					<Route path="/myProfile" element={<MyProfile/>} />
+				</Routes>
+			</div>
+    	</Router>
+    </ThemeProvider>
+    
   );
 }
 

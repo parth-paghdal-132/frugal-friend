@@ -15,7 +15,7 @@ export default function Navigation() {
         </li>
         <li>
           <NavLink
-            to="/signup"
+            to="/auth/signup"
             className={({ isActive }) => (isActive ? "active" : "inactive")}
           >
             Signup
@@ -23,7 +23,7 @@ export default function Navigation() {
         </li>
         <li>
           <NavLink
-            to="/login"
+            to="/auth/login"
             className={({ isActive }) => (isActive ? "active" : "inactive")}
           >
             Login
