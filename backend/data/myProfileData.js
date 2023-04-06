@@ -8,7 +8,7 @@ const { ObjectId } = require("mongodb")
 
 const users = mongoCollections.users
 
-const updateProfile = async (image, thumb, firstName, lastName, bio, username, fbLink, igLink, twitterLink, email) => {
+const updateProfile = async (image, thumb, firstName, lastName, bio, username, fbLink, igLink, twitterLink, isProfilePictureChanged, email) => {
     let errors = {}
     firstName = xss(firstName).trim()
     lastName = xss(lastName).trim()
@@ -31,8 +31,10 @@ const updateProfile = async (image, thumb, firstName, lastName, bio, username, f
         }
     }
 
-    userFromDB.image = image
-    userFromDB.thumb = thumb
+    if(isProfilePictureChanged){
+        userFromDB.image = image
+        userFromDB.thumb = thumb
+    }
     userFromDB.firstName = firstName
     userFromDB.lastName = lastName
     userFromDB.bio = bio

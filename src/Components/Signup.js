@@ -37,7 +37,7 @@ function Signup(){
     const [txtConfirmPasswordError, setTxtConfirmPasswordError] = useState(null)
     const [otherError, setOtherError] = useState("")
 
-    const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
+    const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null, navigateToLogin: false})
 
     const handleFirstNameChange = useCallback((event) => {
         setFirstName(event.target.value);
@@ -104,7 +104,7 @@ function Signup(){
             setApiCallState({...apiCallState, loading:false})
             if(response.status === 200) {
                 if(response.data.email) {
-                    navigate("/auth/login", {state:{ email:response.data.email}, replace: true }, 1)
+                    setApiCallState({...apiCallState, navigateToLogin: true, data: response.data})
                 } else {
                     showErrorData({other: "Could not create user at this moment please try after some time."})
                 }
@@ -156,6 +156,7 @@ function Signup(){
             if(response.status === 200) {
                 if(response.data.email) {
                     localStorage.setItem("token", response.data.token)
+                    setApiCallState({...apiCallState, data: response.data})
                     navigate("/", { replace: true }, 1)
                 } else {
                     showErrorData({other: "Could not log you in at this moment please try after some time."})
@@ -189,6 +190,11 @@ function Signup(){
     let token = localStorage.getItem("token")
     if(token) {
         return <Navigate to="/"/>
+    }
+
+    if(apiCallState.navigateToLogin) {
+        console.log(apiCallState.data)
+        return <Navigate to="/auth/login" state={{email: apiCallState.data.email}}/>
     }
 
     return (

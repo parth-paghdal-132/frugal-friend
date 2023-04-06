@@ -64,22 +64,6 @@ router
             return res.status(403).json(errors)
         }
         
-        let imageFilesInfo = req.files["profilePicture"]
-
-        let profilePictureName = null
-        let thumbName = null
-        try {
-            let fileNames = await uploader.getFileNameForDB(imageFilesInfo, errors)
-            profilePictureName = fileNames.fileNameForDB
-            thumbName = fileNames.thumbName
-
-        } catch (exception) {
-            let code = 403
-            if(exception.code) {
-                code = exception.code
-            }
-            return res.status(code).json(exception)
-        }
         let firstName = xss(req.body.firstName).trim()
         let lastName = xss(req.body.lastName).trim()
         let bio = xss(req.body.bio).trim()
@@ -88,7 +72,26 @@ router
         let fbLink = xss(req.body.fbLink).trim()
         let igLink = xss(req.body.igLink).trim()
         let twitterLink = xss(req.body.twitterLink).trim()
+        let isProfilePictureChanged = xss(req.body.isProfilePictureChanged).trim() === "true"
         
+        let profilePictureName = null
+        let thumbName = null
+        if(isProfilePictureChanged) {
+            let imageFilesInfo = req.files["profilePicture"]
+            try {
+                let fileNames = await uploader.getFileNameForDB(imageFilesInfo, errors)
+                profilePictureName = fileNames.fileNameForDB
+                thumbName = fileNames.thumbName
+    
+            } catch (exception) {
+                let code = 403
+                if(exception.code) {
+                    code = exception.code
+                }
+                return res.status(code).json(exception)
+            }
+        }       
+
         try{
             usersValidations.validateMyProfileData(firstName, lastName, bio, username, fbLink, igLink, twitterLink, errors)
         } catch(exception) {
@@ -107,9 +110,9 @@ router
         }
 
         try {
-            let updatedUser = await myProfileData.updateProfile(profilePictureName, thumbName, firstName, lastName, bio, username, fbLink, igLink, twitterLink, userFromSession.email)
+            let updatedUser = await myProfileData.updateProfile(profilePictureName, thumbName, firstName, lastName, bio, username, fbLink, igLink, twitterLink, isProfilePictureChanged, userFromSession.email)
             if(updatedUser && updatedUser.data) {
-                updatedUser.data = !(!updatedUser.data.password)
+                updatedUser.data.isPasswordSet = !(!updatedUser.data.password)
                 delete updatedUser.data.password
                 req.session.user = updatedUser.data
                 updatedUser.data.token = req.session.id

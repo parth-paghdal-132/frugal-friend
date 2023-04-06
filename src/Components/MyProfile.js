@@ -38,6 +38,7 @@ function MyProfile() {
 
     const [image, setImage] = useState(null)
     const [imageError, setImageError] = useState(null)
+    const [isProfileChanged, setIsProfileChanged] = useState(false)
     const [firstName, setFirstName] = useState("")
     const [txtFirstnameError, setTxtFirstNameError] = useState(null)
     const [lastName, setLastName] = useState("")
@@ -168,13 +169,14 @@ function MyProfile() {
     
     function deleteProfilePicture() {
         setImage(null)
+        setIsProfileChanged(true)
+        document.getElementById("profilePicture").value = ""
     }
 
     function showChangedImage(event) {
         if(event.target.files && event.target.files[0]) {
+            setIsProfileChanged(true)
             setImage(URL.createObjectURL(event.target.files[0]))
-        } else {
-            setImage(null)
         }
     }
 
@@ -244,8 +246,29 @@ function MyProfile() {
         setApiCallState({...apiCallState, loading: true})
         try {
             let formData = createFormData()
+            let response = await axiosInstance.put("/myProfile/updateInformation", formData, {headers: {
+                'Content-Type': 'multipart/form-data'
+              }})
+            setApiCallState({...apiCallState, loading: false})
+            if(response && response.data) {
+                setSuccessMessage("Information updated successfully.")
+                fillData(response.data)
+            } else {
+                showErrorData({other: "Could not update your information at this moment. Please try after some time."})
+            }
         } catch(exception) {
-
+            setApiCallState({...apiCallState, loading:false})
+            if(exception.response && exception.response.data) {
+                let errorData = exception.response.data
+                if(errorData.sessionExpired){
+                    localStorage.removeItem("token")
+                    setApiCallState({...apiCallState, navigateToLogin:true})
+                } else {
+                    showErrorData(errorData)
+                }
+            } else {
+                showErrorData({other: "Could not update your information at this moment. Please try after some time."})
+            }
         }
     }
 
@@ -315,7 +338,8 @@ function MyProfile() {
         let errors = {}
         let isDataValid = false
         try {
-            usersValidations.validateMyProfileData(image, firstName, lastName, bio, email, username, fbLink, igLink, twitterLink, errors)
+            let txtProfilePicture =  document.getElementById("profilePicture")
+            usersValidations.validateMyProfileData(txtProfilePicture.files, firstName, lastName, bio, email, username, fbLink, igLink, twitterLink, errors)
             isDataValid = true
         } catch(exception) {
             showErrorData(exception)
@@ -352,10 +376,20 @@ function MyProfile() {
         formData.append("bio", bio)
         formData.append("email", email)
         formData.append("username", username)
-        formData.append("fbLink", fbLink)
-        formData.append("igLink", igLink)
-        formData.append("twitterLink", twitterLink)
-        // TODO match server image and uploaded image then add image to server
+        if(fbLink) {
+            formData.append("fbLink", fbLink)
+        }
+        if(igLink) {
+            formData.append("igLink", igLink)
+        }
+        if(twitterLink) {
+            formData.append("twitterLink", twitterLink)
+        }
+        formData.append("isProfilePictureChanged", isProfileChanged)
+        if(isProfileChanged) {
+            let txtProfilePicture =  document.getElementById("profilePicture")
+            formData.append("profilePicture", txtProfilePicture.files[0])
+        }
         return formData
     }
 
@@ -373,11 +407,11 @@ function MyProfile() {
 
     let token = localStorage.getItem("token")
     if(!token) {
-        return <Navigate to="/auth/login"/>
+        return <Navigate to="/auth/login" state={{otherError: "Please login to make changes in your profile."}}/>
     }
 
     if(apiCallState.navigateToLogin) {
-        return <Navigate to="/auth/login"/>
+        return <Navigate to="/auth/login" state={{otherError: "Please login to make changes in your profile."}}/>
     }
 
     return (
@@ -390,7 +424,7 @@ function MyProfile() {
                     { successMessage && <Alert severity="success" sx={{mt:3}}>{successMessage}</Alert> }
                     { apiCallState.loading && <Alert severity="info" sx={{mt:3}}>Loading your data</Alert> }
                 </Grid>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} id="updateProfileForm">
                     <Grid container sx={{mt:5,direction:"column", alignItems:"center", justifyContent:"center"}}>
                         <Box
                             sx={{
@@ -415,7 +449,7 @@ function MyProfile() {
                                     left:"0",
                                     position:"absolute",
                                 }} display="flex" flexDirection="column" justifyContent="flex-end" textAlign="center">
-                                    <input type="file" name="profilePicture" ref={txtInputFile} style={{display: 'none'}} onChange={showChangedImage} accept="image/png, image/jpeg, image/jpg"/>
+                                    <input type="file" id="profilePicture" name="profilePicture" ref={txtInputFile} style={{display: 'none'}} onChange={showChangedImage} accept="image/png, image/jpeg, image/jpg"/>
                                     <Stack
                                         direction="row"
                                         justifyContent="center"
@@ -448,7 +482,8 @@ function MyProfile() {
                                     value={firstName}
                                     onChange={handleFirstNameChange}
                                     aria-describedby="firstNameInfo"
-                                    id="firstName" 
+                                    id="firstName"
+                                    name="firstName" 
                                     fullWidth={true} 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -466,6 +501,7 @@ function MyProfile() {
                                     onChange={handleLastNameChange}
                                     aria-describedby="lastNameInfo"
                                     id="lastName" 
+                                    name="lastName"
                                     fullWidth={true} 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -485,6 +521,7 @@ function MyProfile() {
                                 aria-describedby="bioInfo"
                                 rows={3}
                                 id="bio"
+                                name="bio"
                                 fullWidth={true}
                                 startAdornment = {
                                     <InputAdornment position="start">
@@ -503,6 +540,7 @@ function MyProfile() {
                                 disabled={true}
                                 aria-describedby="emailInfo"
                                 id="email" 
+                                name="email"
                                 type="email" 
                                 fullWidth={true} 
                                 startAdornment={
@@ -522,6 +560,7 @@ function MyProfile() {
                                     onChange={handleUsernameChange}
                                     aria-describedby="usernameInfo"
                                     id="username"
+                                    name="username"
                                     type="text"
                                     fullWidth={true}
                                     startAdornment= {
@@ -552,6 +591,7 @@ function MyProfile() {
                                 onChange={handleFbLinkChange}
                                 aria-describedby="facebookInfo"
                                 id="facebookLink"
+                                name="fbLink"
                                 type="url"
                                 fullWidth={true}
                                 startAdornment={
@@ -570,6 +610,7 @@ function MyProfile() {
                                 onChange={handleIGLinkChange}
                                 aria-describedby="instagramInfo"
                                 id="instagramLink"
+                                name="igLink"
                                 type="url"
                                 fullWidth={true}
                                 startAdornment={
@@ -588,6 +629,7 @@ function MyProfile() {
                                 onChange={handleTwitterLinkChange}
                                 aria-describedby="twitterInfo"
                                 id="twitterLink"
+                                name="twitterLink"
                                 type="url"
                                 fullWidth={true}
                                 startAdornment={
@@ -602,8 +644,9 @@ function MyProfile() {
                         <Button
                             type="submit"
                             variant="contained"
-                            fullWidth={true}>
-                                Update information
+                            fullWidth={true}
+                            disabled={apiCallState.loading}>
+                                {apiCallState.loading ? "Updating information" : "Update information"}
                         </Button>
                     </Grid>
                 </form>

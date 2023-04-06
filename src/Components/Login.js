@@ -13,19 +13,18 @@ const SIGNUP_SOURCE_GOOGLE = "google"
 const provider = new GoogleAuthProvider()
 const auth = getAuth(fireabseApp)
 
-function Login(props){
+function Login(){
 
     const { state } = useLocation()
-    console.log(state)
     const navigate = useNavigate()
 
     const [showPassword, setShowPassword] = useState(false)
 
-    const [email, setEmail] = useState(state ? state.email : "")
+    const [email, setEmail] = useState(state && state.email ? state.email : "")
     const [txtEmailError, setTxtEmailError] = useState(null)
     const [password, setPassword] = useState("")
     const [txtPasswordError, setTxtPasswordError] = useState(null)
-    const [otherError, setOtherError] = useState(props.otherError)
+    const [otherError, setOtherError] = useState(state && state.otherError ? state.otherError : "")
 
     const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
 

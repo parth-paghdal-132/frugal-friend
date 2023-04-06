@@ -19,7 +19,7 @@ function validateMyProfileData(image, firstName, lastName, bio, email, username,
     if(!lastName) {
         errors.lastName = "Please provide last name."
     }
-    if(username) {
+    if(!username) {
         errors.username = "please provide username."
     }
 
@@ -54,7 +54,7 @@ function validateMyProfileData(image, firstName, lastName, bio, email, username,
         errors.twitterLink = "Please provide valid twitter link."
     }
 
-    if(image && image.length !== 1){
+    if(image && image.length > 1){
         errors.profilePicture = "Please provide only one image"
     }
 
@@ -86,12 +86,14 @@ function validateMyProfileData(image, firstName, lastName, bio, email, username,
         errors.twitterLink = "Please provide valid twitter link."
     }
     
-    let imageFile = image[0]
-    if(imageFile.size > ALLOWED_IMAGE_FILE_SIZE){
-        errors.profilePicture = "Selected image file should be less than 15 MB."
-    }
-    if(!ALLOWED_IMAGE_TYPE.includes(imageFile["type"])){
-        errors.profilePicture = "Selected image file should be in jpg, jpeg or png format."
+    if(image && image.length > 1) {
+        let imageFile = image[0]
+        if(imageFile.size > ALLOWED_IMAGE_FILE_SIZE){
+            errors.profilePicture = "Selected image file should be less than 15 MB."
+        }
+        if(!ALLOWED_IMAGE_TYPE.includes(imageFile["type"])){
+            errors.profilePicture = "Selected image file should be in jpg, jpeg or png format."
+        }
     }
 
     if(Object.keys(errors).length > 0) {
