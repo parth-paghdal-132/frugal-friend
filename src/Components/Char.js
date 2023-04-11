@@ -1,6 +1,6 @@
 import { LineChart, Line, PieChart, Pie, Legend, Tooltip, ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Bar } from 'recharts';
 
-function ChartComponent({ chartType, chartData }) {
+function ChartComponent({chartType, chartData, title}) {
   let chartJsx;
 
   if (chartType === 'line') {
@@ -24,9 +24,11 @@ function ChartComponent({ chartType, chartData }) {
       </ResponsiveContainer>
     );
   } else if (chartType === 'BarChart'){
+    console.log(chartData);
 
     chartJsx = (
-        <BarChart width={600} height={400} data={chartData}>
+        
+        <BarChart width={850} height={400} data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="category" />
         <YAxis />
@@ -35,11 +37,14 @@ function ChartComponent({ chartType, chartData }) {
         <Bar dataKey="amount" fill="#8884d8" />
         </BarChart>
         
-    )
-  }
+    ) 
+  } else {
+        chartJsx = null;
+    }
 
   return (
     <div>
+      <h2 className="chart-title">{title}</h2>
       {chartJsx}
     </div>
   );

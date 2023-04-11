@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ChartComponent from "./Char";
-import { BarChart } from "recharts";
+
 
 const Tracking = () => {
   const [estimatedIncome, setEstimatedIncome] = useState(0);
@@ -10,7 +10,16 @@ const Tracking = () => {
   const [showMonth, setShowMonth] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [expenseAmount, setExpenseAmount] = useState(0);
-  const [charData, setCharData] = useState(null);
+  // test data
+  const data = [
+    { category: "Food and groceries", amount: 500 },
+    { category: "Housing and utilities", amount: 800 },
+    { category: "Transportation", amount: 300 },
+    { category: "Personal care", amount: 200 },
+    { category: "Entertainment", amount: 400 }
+  ];
+
+  const [charData, setCharData] = useState(data);
 
   useEffect(() => {
     // const fetchData = async () => {
@@ -53,16 +62,7 @@ const Tracking = () => {
     setSelectedCategory(event.target.value);
   }
 
-  // test data
-  const data = [
-    { category: "Food and groceries", amount: 500 },
-    { category: "Housing and utilities", amount: 800 },
-    { category: "Transportation", amount: 300 },
-    { category: "Personal care", amount: 200 },
-    { category: "Entertainment", amount: 400 }
-  ];
-
-  setCharData(data);
+  
   
 
   return (
@@ -166,7 +166,7 @@ const Tracking = () => {
       </div>
 
       <div className="chart-container">
-        <ChartComponent charType={BarChart} chartData={charData} />
+        <ChartComponent chartType='BarChart' chartData={charData} title='April'/>
       </div>
     </div>
   );
