@@ -6,6 +6,7 @@ import Signup from "./Signup";
 import Navigation from "./Navigation";
 import Home from "./Home";
 import MyProfile from "./MyProfile";
+import UsersProfile from "./UsersProfile";
 
 const theme = createTheme({
   palette: {
@@ -122,6 +123,7 @@ function App() {
 					<Route path="/auth/signup" element={<Signup />} />
 					<Route path="/auth/login" element={<Login />} />
 					<Route path="/myProfile" element={<MyProfile/>} />
+          <Route path="/user-profile/:userId" element={<UsersProfile />} />
 				</Routes>
 			</div>
     	</Router>
