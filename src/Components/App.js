@@ -3,7 +3,7 @@ import { Button, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
-import Navigation from "./Navigation";
+import Navbar from "./Navbar";
 import Home from "./Home";
 import MyProfile from "./MyProfile";
 
@@ -108,25 +108,24 @@ const theme = createTheme({
   },
 });
 function App() {
-  	return (
-		<ThemeProvider theme={theme}>
-      	<Router>
-      		<div className="App">
-				<header className="App-header">
-					<Navigation></Navigation>
-				</header>
-      		</div>
-      		<div>
-				<Routes>
-					<Route exact path="/" element={<Home />} />
-					<Route path="/auth/signup" element={<Signup />} />
-					<Route path="/auth/login" element={<Login />} />
-					<Route path="/myProfile" element={<MyProfile/>} />
-				</Routes>
-			</div>
-    	</Router>
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className="App">
+          <header className="App-header">
+            <Navbar />
+          </header>
+        </div>
+        <div>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/myProfile" element={<MyProfile />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
-    
   );
 }
 
