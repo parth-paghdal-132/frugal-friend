@@ -127,7 +127,7 @@ function App() {
 				<Routes>
 				<Route path='/signup' element={<Signup />} />
 				<Route path='/login' element={<Login />} />
-				<Route path='/tracking' element={<Tracking />} />
+				<Route path='/Tracking' element={<Tracking />} />
 				</Routes>
 			</Router>
     </ThemeProvider>
