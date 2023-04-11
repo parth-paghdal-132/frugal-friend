@@ -91,11 +91,10 @@ const Tracking = () => {
 
         <div className="form-input">
           <label htmlFor="month-selection">Select Month:</label>
-          <select
+          <div className="select-container"><select
             id="month-selection"
             value={selectedMonth}
-            onChange={handleMonthChange}
-          >
+            onChange={handleMonthChange}>
             <option value="">Select a Month</option>
             <option value="January">January</option>
             <option value="February">February</option>
@@ -110,6 +109,8 @@ const Tracking = () => {
             <option value="November">November</option>
             <option value="December">December</option>
           </select>
+          </div>
+          
         </div>
 
         <button className="add-btn">Set</button>
@@ -141,7 +142,8 @@ const Tracking = () => {
         </div>
         <div className="form-input">
           <label htmlFor="month-selection">Select Month:</label>
-          <select
+          <div className="select-container">
+            <select
             id="month-selection"
             value={addExpenseMonth}
             onChange={handleAddMonthChange}
@@ -160,6 +162,8 @@ const Tracking = () => {
             <option value="November">November</option>
             <option value="December">December</option>
           </select>
+          </div>
+          
         </div>
         <button className="add-btn">Add</button>
 
