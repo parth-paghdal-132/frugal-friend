@@ -1,3 +1,31 @@
-.Navbar-Container {
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  }
   
-}
+  h1 {
+    margin-bottom: 2rem;
+    font-size: 3rem;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .form-input {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+  
+  .form-input label {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+  }
+  
