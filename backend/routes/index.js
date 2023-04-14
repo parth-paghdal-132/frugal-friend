@@ -1,7 +1,9 @@
 const authRoutes = require("./authRoutes")
+const trackingRoutes = require("./trackingRoutes");
 
 const configRoutes = (app) => {
 	app.use("/auth", authRoutes)
+    app.use("", trackingRoutes)
 	
     app.use("*", (req, res) => {
         return res.status(404).json({

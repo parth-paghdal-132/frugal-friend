@@ -14,6 +14,9 @@ const Tracking = () => {
   const [selectedChart, setSelectedChart] = useState('BarChart');
   const [updatedIncome, setUpdatedIncome] = useState(0);
   const [savingGoal, setSavingGoal] = useState(0);
+  const [budgetData, setBudgetData] = useState(null);
+  const [expenseDescription, setExpenseDescription] = useState("");
+  const [updatedIncomeDescription, setUpdatedIncomeDescription] = useState("");
   
   
 
@@ -36,9 +39,11 @@ const Tracking = () => {
   
   const [monthlyExpense, setMonthlyExpense] = useState(monthlyExpenses);
 
+  const [monthlyIncome, setMonthlyIncome] = useState(monthlyExpenses);
+
   const [charData, setCharData] = useState(data);
 
-  const [monthlySaving, setMonthlySaving] = useState(monthlyExpense);
+  const [monthlySaving, setMonthlySaving] = useState(monthlyExpenses);
 
   useEffect(() => {
     // const fetchData = async () => {
@@ -114,6 +119,14 @@ const Tracking = () => {
     setSelectedChart(event.target.value);
   }
 
+  const handleExpenseDescriptionChange = (event) => {
+    setExpenseDescription(event.target.value);
+  }
+
+  const handleIncomeDescriptionChange = (event) => {
+    setUpdatedIncomeDescription(event.target.value);
+  }
+
   const handleUpdateIncome = (event) => {
 
     const input = event.target.value;
@@ -152,7 +165,7 @@ const Tracking = () => {
   const handleSetClick = () => {
     if (selectedMonth) {
       setEstimatedIncome(0);
-      setEstimatedExpense(0);
+      setSavingGoal(0);
     }
   };
 
@@ -194,6 +207,7 @@ const Tracking = () => {
 
       <div className="info-bar">
         <h2>{now.toLocaleString('default', { month: 'long' })} {now.getDate()} </h2>
+        <h2>Your Estimated Income: {budgetData && budgetData.totalIncome ? budgetData.totalIncome : "$3000"}</h2>
         <h2>$2800 left to spend</h2>
       </div>
       <div className="input-part">
@@ -283,7 +297,19 @@ const Tracking = () => {
             <option value="Housing and utilities">Housing and utilities</option>
             <option value="Transportation">Transportation</option>
             <option value="Personal care">Personal care</option>
+            <option value="Entertainment">Personal care</option>
+            
           </select>
+
+        </div>
+        <div className="form-input">
+          <label htmlFor="expense-description">Expense description:</label>
+          <input
+            type="string"
+            id="expense-description"
+            value={expenseDescription}
+            onChange={handleExpenseDescriptionChange}
+          />
 
         </div>
         {/* <div className="form-input">
@@ -326,6 +352,16 @@ const Tracking = () => {
             id="updated-income"
             value={updatedIncome}
             onChange={handleUpdateIncome}
+          />
+        </div>
+
+        <div className="form-input">
+          <label htmlFor="updatedIncome-description">Description:</label>
+          <input
+            type="string"
+            id="updatedIncome-description"
+            value={updatedIncomeDescription}
+            onChange={handleIncomeDescriptionChange}
           />
         </div>
 
@@ -402,7 +438,8 @@ const Tracking = () => {
 
         <h2>Saving Summary</h2>
 
-        <ChartComponent chartType="BarChart" chartData={monthlyExpense} title="Monthly Saving" />
+        <ChartComponent chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
+        <ChartComponent chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
         <ChartComponent chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
       </div>
     </div>

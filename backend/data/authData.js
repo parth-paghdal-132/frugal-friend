@@ -96,5 +96,7 @@ const getUserByEmail = async (email) => {
 
 module.exports = {
     createUser,
-    authenticateUser
+    authenticateUser,
+    getUser,
+    getUserByEmail
 }
