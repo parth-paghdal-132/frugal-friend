@@ -41,7 +41,7 @@ function ChartComponent({chartType, chartData, title}) {
     );
   } else if (chartType === 'BarChart'){
     console.log(chartData);
-    if (title === 'Monthly Saving') {
+    if (title === 'Monthly Saving' || title === 'Monthly Income') {
         chartJsx = (
             <div>
             <h3 className="chart-title">{title}</h3>
@@ -51,7 +51,7 @@ function ChartComponent({chartType, chartData, title}) {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="amount" fill="#8884d8">
+            <Bar dataKey="amount" fill= {title === 'Monthly Saving' ? "#8884d8" : "#ff9900"}>
             </Bar>
             </BarChart>
             </div>
