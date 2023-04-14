@@ -224,7 +224,7 @@ async function updateIncome(userId, updatedMonth, year, updatedIncome, descripti
             date: (new Date().getMonth() +  1) + "/" + new Date().getDate()
           },
         },
-        $set: {leftToSpend: sanitizedUpdatedIncome - existingBudget.totalExpense}
+        $set: {leftToSpend: sanitizedUpdatedIncome - existingBudget.totalExpense - existingBudget.savingGoal}
     }
     );
   
