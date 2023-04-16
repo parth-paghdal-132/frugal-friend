@@ -3,7 +3,7 @@ import { Button, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
-import Navigation from "./Navigation";
+import Navbar from "./Navbar";
 import Home from "./Home";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
@@ -113,9 +113,9 @@ function App() {
 		<ThemeProvider theme={theme}>
       	<Router>
       		<div className="App">
-				<header className="App-header">
-					<Navigation></Navigation>
-				</header>
+          <header className="App-header">
+            <Navbar />
+          </header>
       		</div>
       		<div>
 				<Routes>
@@ -128,7 +128,6 @@ function App() {
 			</div>
     	</Router>
     </ThemeProvider>
-    
   );
 }
 
