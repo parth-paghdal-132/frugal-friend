@@ -52,7 +52,7 @@ function Login(){
             showErrorData(exception)
         }
         if(isDataValid) {
-            makeAuthenticateUserApiCall(email, password, SIGNUP_SOURCE_APP)
+            makeAuthenticateUserApiCall(email, password, null, SIGNUP_SOURCE_APP)
         }
     }
 
@@ -62,11 +62,12 @@ function Login(){
         setOtherError(errors.other)
     }
 
-    async function makeAuthenticateUserApiCall(email, password, source) {
+    async function makeAuthenticateUserApiCall(email, password, displayName, source) {
         setApiCallState({...apiCallState, loading:true})
         try {
             const response = await axiosInstance.post("auth/login",{
                 email: email,
+                displayName: displayName,
                 password: password,
                 source: source
             })
@@ -95,7 +96,8 @@ function Login(){
         try {
             let result = await signInWithPopup(auth, provider)
             if(result.user){
-                makeAuthenticateUserApiCall(result.user.email, null, SIGNUP_SOURCE_GOOGLE)
+                console.log(result.user)
+                makeAuthenticateUserApiCall(result.user.email, null, result.user.displayName, SIGNUP_SOURCE_GOOGLE)
             } else {
                 showErrorData({other: "Could not log you in at this moment please try after some time."})
             }

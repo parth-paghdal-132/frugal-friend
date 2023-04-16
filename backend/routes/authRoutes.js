@@ -105,9 +105,10 @@ router
         let errors = {}
         let email = xss(req.body.email).trim()
         let source = xss(req.body.source).trim()
+        let displayName = xss(req.body.displayName).trim()
 
         try {
-            authValidations.validateGoogleLoginData(email, source, errors) 
+            authValidations.validateGoogleLoginData(email, displayName, source, errors) 
         } catch(exception) {
             let code = 403
             if(exception.code) {
@@ -117,7 +118,7 @@ router
         }
 
         try {
-            let user = await authData.authenticateGoogleUser(email, source)
+            let user = await authData.authenticateGoogleUser(email, displayName, source)
             if(user && user.data) {
                 delete user.data.password
                 req.session.user = user.data

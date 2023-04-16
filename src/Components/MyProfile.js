@@ -253,6 +253,7 @@ function MyProfile() {
             if(response && response.data) {
                 setSuccessMessage("Information updated successfully.")
                 fillData(response.data)
+                showErrorData({})
             } else {
                 showErrorData({other: "Could not update your information at this moment. Please try after some time."})
             }

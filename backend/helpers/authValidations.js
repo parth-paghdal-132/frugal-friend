@@ -175,7 +175,7 @@ function isValidEmail(email, errors) {
     }
 }
 
-function validateGoogleLoginData(email, source, errors) {
+function validateGoogleLoginData(email, displayName, source, errors) {
     if(!email) {
         errors.email = "Please provide email."
     }
@@ -212,10 +212,35 @@ function validateGoogleLoginData(email, source, errors) {
     }
 }
 
+function getNames(displayName) {
+    let firstName = null
+    let lastName = null
+
+    if(!displayName) {
+        return {firstName, lastName}
+    }
+    if(typeof displayName !== "string") {
+        return {firstName, lastName}
+    }
+    let names = displayName.split(" ")
+    if(names.length <= 0) {
+        return {firstName, lastName}
+    }
+
+    if(names.length >= 1) {
+        firstName = names[0]
+    }
+    if(names.length >= 2) {
+        lastName = names[1]
+    }    
+    return {firstName, lastName}
+}
+
 module.exports = {
     validateCreateUserData,
     validateAuthenticateUser,
     isValidUserId,
     isValidEmail,
-    validateGoogleLoginData
+    validateGoogleLoginData,
+    getNames
 }

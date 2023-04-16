@@ -46,15 +46,19 @@ const createUser = async (firstName, lastName, email, username, password, confir
     return {data: user, code: 200}
 }
 
-const createUserWithEmail = async (email, source) => {
+const createUserWithEmail = async (email, displayName, source) => {
     let errors = {}
     email = xss(email).trim()
+    displayName = xss(displayName).trim()
     source = xss(source).trim()
 
-    authValidations.validateGoogleLoginData(email, source, errors)
+    authValidations.validateGoogleLoginData(email, displayName, source, errors)
 
+    let {firstName, lastName} = authValidations.getNames(displayName)
     const userCollection = await users()
     const insertInfo = await userCollection.insertOne({
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         source: source
     })
@@ -86,19 +90,20 @@ const authenticateUser = async (email, password, source) => {
     return {data:user, code: 200}
 }
 
-const authenticateGoogleUser = async (email, source) => {
+const authenticateGoogleUser = async (email, displayName, source) => {
     let errors = {}
     email = xss(email).trim()
+    displayName = xss(displayName).trim()
     source = xss(source).trim()
 
-    authValidations.validateGoogleLoginData(email, source, errors)
+    authValidations.validateGoogleLoginData(email, displayName, source, errors)
 
     const userCollection = await users()
     const user = await userCollection.findOne({email: email})
     if(user) {
         return {data:user, code: 200}
     }
-    let newUser = await createUserWithEmail(email, source)
+    let newUser = await createUserWithEmail(email, displayName, source)
     return {data:newUser, code: 200}
 }
 
