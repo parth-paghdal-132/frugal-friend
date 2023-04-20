@@ -1,7 +1,7 @@
 const express = require("express")
 const configRoutes = require("./routes")
 const session = require("express-session")
-
+const cors = require("cors")
 const public = express.static(__dirname + "/public")
 const uploads = express.static(__dirname + "/uploads")
 const app = express()
@@ -10,6 +10,12 @@ app.use("/public", public)
 app.use("/uploads", uploads)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+}
+app.use(cors(corsOptions))
 
 app.use(
     session({
@@ -20,6 +26,16 @@ app.use(
     })
 )
 
+app.use("/auth", async(req, res, next) => {
+    if(req.session.user){
+        let errors = {}
+        errors.other = "You are already logged in."
+        errors.code = 403
+        return res.status(errors.code).json(errors)
+    } else {
+        next()
+    }
+})
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     
     if(req.body && req.body._method) {

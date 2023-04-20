@@ -8,59 +8,82 @@
   h1 {
     margin-bottom: 2rem;
     font-size: 3rem;
+}
+
+.App-header {
+  color: white;
+}
+
+ul a:hover {
+  background-color: transparent;
+  color: blue;
+}
+
+.active {
+  color: red;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
   }
+}
   
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .form-input {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1rem;
-    align-items: center;
-  }
-  
-  .form-input label {
-    margin-right: 1rem;
-    font-size: 1.2rem;
-  }
-  
-  .select-container {
-    position: relative;
-    width: 150px;
-    margin: 0 10px;
-  }
-  
-  .select-container select {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 16px;
-    color: #495057;
-    appearance: none;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  .select-container select::-ms-expand {
-    display: none;
-  }
-  
-  .select-container::after {
-    content: '\25BC';
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #6c757d;
-    pointer-events: none;
-  }
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.form-input label {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.select-container {
+  position: relative;
+  width: 150px;
+  margin: 0 10px;
+}
+
+.select-container select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 16px;
+  color: #495057;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.select-container select::-ms-expand {
+  display: none;
+}
+
+.select-container::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #6c757d;
+  pointer-events: none;
+}
 
 

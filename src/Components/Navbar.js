@@ -1,7 +1,19 @@
-import * as React from 'react';
-import {Link, NavLink} from 'react-router-dom';
-import {AppBar, Container, Toolbar, Box, Button, Typography, IconButton, Menu, MenuItem, Tooltip, Avatar} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import * as React from "react";
+import { Link, NavLink } from "react-router-dom";
+import {
+  AppBar,
+  Container,
+  Toolbar,
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Avatar,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
