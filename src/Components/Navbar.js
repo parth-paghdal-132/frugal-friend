@@ -239,7 +239,7 @@ const Navbar = () => {
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <Link
-                  to="/profile"
+                  to="/myprofile"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Typography textAlign="center">View Profile</Typography>

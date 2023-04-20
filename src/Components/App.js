@@ -5,6 +5,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
 import Home from "./Home";
+import Logout from "./Logout";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
 
@@ -108,25 +109,27 @@ const theme = createTheme({
     fontSize: 16,
   },
 });
+
 function App() {
-  	return (
-		<ThemeProvider theme={theme}>
-      	<Router>
-      		<div className="App">
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className="App">
           <header className="App-header">
             <Navbar />
           </header>
-      		</div>
-      		<div>
-				<Routes>
-					<Route exact path="/" element={<Home />} />
-					<Route path="/auth/signup" element={<Signup />} />
-					<Route path="/auth/login" element={<Login />} />
-					<Route path="/myProfile" element={<MyProfile/>} />
-          <Route path="/user-profile/:userId" element={<UsersProfile />} />
-				</Routes>
-			</div>
-    	</Router>
+        </div>
+        <div>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/myProfile" element={<MyProfile />} />
+            <Route path="/user-profile/:userId" element={<UsersProfile />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
   );
 }
