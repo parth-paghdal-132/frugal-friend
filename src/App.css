@@ -32,7 +32,7 @@ ul a:hover {
   from {
     transform: rotate(0deg);
   }
-  
+}
   .select-container select {
     display: block;
     width: 100%;
