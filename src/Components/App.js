@@ -1,6 +1,13 @@
 import "../App.css";
-import { Button, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
+import { Button, createTheme, Grid, Paper, ThemeProvider, } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+	NavLink,
+	BrowserRouter as Router,
+	Link,
+	Route,
+	Routes
+} from 'react-router-dom';
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
@@ -8,6 +15,8 @@ import Home from "./Home";
 import Logout from "./Logout";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
+import Tracking from './Tracking';
+import Navbar from './Navbar';
 
 const theme = createTheme({
   palette: {
@@ -127,6 +136,7 @@ function App() {
             <Route path="/logout" element={<Logout />} />
             <Route path="/myProfile" element={<MyProfile />} />
             <Route path="/user-profile/:userId" element={<UsersProfile />} />
+            <Route path='/Tracking' element={<Tracking />} />
           </Routes>
         </div>
       </Router>
