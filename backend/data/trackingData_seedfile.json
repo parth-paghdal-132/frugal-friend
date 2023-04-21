@@ -1,0 +1,218 @@
+[
+
+
+{
+    "_id": {
+      "$oid": "64389e9c774315304aa17d48"
+    },
+    "info": {
+      "user": {
+        "_id": {
+          "$oid": "6166e35bdf192bd2606c10fa"
+        },
+        "username": "johndoe",
+        "email": "johndoe@example.com"
+      },
+      "month": 4,
+      "year": 2023
+    },
+    "income": [
+      {
+        "amount": "3000",
+        "description": "reset the saving goal for this month",
+        "date": "4/13"
+      }
+    ],
+    "expense": [
+      {
+        "category": "Food and groceries",
+        "amount": 20,
+        "description": "Taco"
+      }
+    ],
+    "totalExpense": 20,
+    "points": 0,
+    "leftToSpend": 3980,
+    "savingGoal": 1000
+},
+
+{
+    "_id": {
+      "$oid": "64389e9c774315304aa17d49"
+    },
+    "info": {
+      "user": {
+        "_id": {
+          "$oid": "6166e35bdf192bd2606c10fb"
+        },
+        "username": "janedoe",
+        "email": "janedoe@example.com"
+      },
+      "month": 3,
+      "year": 2023
+    },
+    "income": [
+      {
+        "amount": "5000",
+        "description": "Salary",
+        "date": "3/15"
+      }
+    ],
+    "expense": [
+      {
+        "category": "Entertainment",
+        "amount": 100,
+        "description": "Movie tickets"
+      },
+      {
+        "category": "Food and groceries",
+        "amount": 200,
+        "description": "Groceries"
+      }
+    ],
+    "totalExpense": 300,
+    "points": 20,
+    "leftToSpend": 4700,
+    "savingGoal": 1500
+},
+
+{
+    "_id": {
+      "$oid": "64389e9c774315304aa17d50"
+    },
+    "info": {
+      "user": {
+        "_id": {
+          "$oid": "6166e35bdf192bd2606c10fc"
+        },
+        "username": "bobsmith",
+        "email": "bobsmith@example.com"
+      },
+      "month": 5,
+      "year": 2023
+    },
+    "income": [
+      {
+        "amount": "2000",
+        "description": "Freelance work",
+        "date": "5/1"
+      }
+    ],
+    "expense": [
+      {
+        "category": "Transportation",
+        "amount": 50,
+        "description": "Gas"
+      },
+      {
+        "category": "Housing",
+        "amount": 1000,
+        "description": "Rent"
+      },
+      {
+        "category": "Food and groceries",
+        "amount": 150,
+        "description": "Eating out"
+      }
+    ],
+    "totalExpense": 1200,
+    "points": 10,
+    "leftToSpend": 800,
+    "savingGoal": 500
+},
+
+{
+    "_id": {
+      "$oid": "64389e9c774315304aa17d51"
+    },
+    "info": {
+      "user": {
+        "_id": {
+          "$oid": "6166e35bdf192bd2606c10fb"
+        },
+        "username": "janedoe",
+        "email": "janedoe@example.com"
+      },
+      "month": 7,
+      "year": 2022
+    },
+    "income": [
+      {
+        "amount": "4500",
+        "description": "Salary",
+        "date": "7/1"
+      }
+    ],
+    "expense": [
+      {
+        "category": "Entertainment",
+        "amount": 30,
+        "description": "Movie tickets"
+      },
+      {
+        "category": "Food and groceries",
+        "amount": 100,
+        "description": "Groceries for the week"
+      }
+    ],
+    "totalExpense": 130,
+    "points": 5,
+    "leftToSpend": 3870,
+    "savingGoal": 500
+},
+
+{
+    "_id": {
+      "$oid": "64389e9c774315304aa17d4a"
+    },
+    "info": {
+      "user": {
+        "_id": {
+          "$oid": "6166e35bdf192bd2606c10fc"
+        },
+        "username": "bobsmith",
+        "email": "bobsmith@example.com"
+      },
+      "month": 12,
+      "year": 2021
+    },
+    "income": [
+      {
+        "amount": "2500",
+        "description": "Bonus",
+        "date": "12/1"
+      },
+      {
+        "amount": "3000",
+        "description": "Salary",
+        "date": "12/15"
+      }
+    ],
+    "expense": [
+      {
+        "category": "Transportation",
+        "amount": 50,
+        "description": "Gasoline"
+      },
+      {
+        "category": "Food and groceries",
+        "amount": 150,
+        "description": "Groceries for the month"
+      },
+      {
+        "category": "Utilities",
+        "amount": 100,
+        "description": "Electricity bill"
+      }
+    ],
+    "totalExpense": 300,
+    "points": 10,
+    "leftToSpend": 6200,
+    "savingGoal": 2000
+}
+  
+]
+
+  
+  
+
