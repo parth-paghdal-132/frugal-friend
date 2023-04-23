@@ -1,34 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ChartComponent from "./Char";
-import { Alert, Button, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, Typography, useTheme } from "@mui/material";
+import { Alert, Select, Button, MenuItem, Tooltip, Divider, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, Typography, useTheme
+,TextField, 
+responsiveFontSizes} from "@mui/material";
+import HelpIcon from '@mui/icons-material/Help';
+import axios from 'axios'
+import { Navigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import axiosInstance from "../config/axiosConfig"
+import helpers from "../helpers/trackingValidation"
+
+
 
 
 const Tracking = () => {
-  const [estimatedIncome, setEstimatedIncome] = useState(0);
-  const [estimatedExpense, setEstimatedExpense] = useState(0);
+  
+  const [estimatedIncome, setEstimatedIncome] = useState(null);
+  const [estimatedExpense, setEstimatedExpense] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [incomeMonth, setIncomeMonth] = useState(null);
-  const [showMonth, setShowMonth] = useState(null);
+  const [showMonth, setShowMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [expenseAmount, setExpenseAmount] = useState(0);
+  const [expenseAmount, setExpenseAmount] = useState(null);
   const [selectedChart, setSelectedChart] = useState('BarChart');
-  const [updatedIncome, setUpdatedIncome] = useState(0);
-  const [savingGoal, setSavingGoal] = useState(0);
+  const [updatedIncome, setUpdatedIncome] = useState(null);
+  const [savingGoal, setSavingGoal] = useState(null);
   const [budgetData, setBudgetData] = useState(null);
   const [expenseDescription, setExpenseDescription] = useState("");
   const [updatedIncomeDescription, setUpdatedIncomeDescription] = useState("");
-  
-  
+  const [sessionData, setSessionData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true);
+  const [charData, setCharData] = useState(null);
+  const [summaryData, setSummaryData] = useState(null);
+
+
 
   
   // test data
-  const data = [
-    { category: "Food and groceries", amount: 500 },
-    { category: "Housing and utilities", amount: 800 },
-    { category: "Transportation", amount: 300 },
-    { category: "Personal care", amount: 200 },
-    { category: "Entertainment", amount: 400 }
+  
+const monthOptions = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
+  const categoryOptions = [
+    "Food and groceries",
+    "Housing and utilities",
+    "Transportation",
+    "Personal care",
+    "Entertainment"
+  ]
+
+  const chartTypeOptions = [
+    "BarChart",
+    "Pie"
+  ]
 
   const monthlyExpenses = [
     { month: 'January', amount: 100 },
@@ -37,27 +72,140 @@ const Tracking = () => {
     { month: 'April', amount: 300 },
   ];
   
-  const [monthlyExpense, setMonthlyExpense] = useState(monthlyExpenses);
+  const parseChartData = (data) => {
 
-  const [monthlyIncome, setMonthlyIncome] = useState(monthlyExpenses);
+    let amount1 = 0;
+    let amount2 = 0;
+    let amount3 = 0;
+    let amount4 = 0;
+    let amount5 = 0;
+    for (let i = 0; i < data.expense.length; i++) {
+      if (data.expense[i].category === "Food and groceries") {
+        amount1 = amount1 + data.expense[i].amount
+      }
+      if (data.expense[i].category === "Housing and utilities") {
+        amount2 = amount2 + data.expense[i].amount
+      }
+      if (data.expense[i].category === "Transportation") {
+        amount3 = amount3 + data.expense[i].amount
+      }
+      if (data.expense[i].category === "Personal care") {
+        amount4 = amount4 + data.expense[i].amount
+      }
+      if (data.expense[i].category === "Entertainment") {
+        amount5 = amount5 + data.expense[i].amount
+      }  
+    }
+    let res = [
+      { category: "Food and groceries", amount: amount1 },
+      { category: "Housing and utilities", amount: amount2 },
+      { category: "Transportation", amount: amount3 },
+      { category: "Personal care", amount: amount4 },
+      { category: "Entertainment", amount: amount5 }];
+    return res;
+  }
+  
+  const parseSummaryData = (data, type) => {
+    if (type == "Monthly Expense") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.totalExpense 
+        }
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+    if (type == "Monthly Income") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.income[perMonth.income.length - 1].amount}
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+    if (type === "Monthly Saving") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.leftToSpend + perMonth.savingGoal}
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+  }
 
-  const [charData, setCharData] = useState(data);
-
-  const [monthlySaving, setMonthlySaving] = useState(monthlyExpenses);
+  let token = localStorage.getItem("token")
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const data = await ///// fetch from database
+    const fetchSessionData = async () => {
+      try {
+        const response = await axiosInstance.get("/api/session");
+        const budgetData = await axiosInstance.post("/api/budget-data", {
+          userId: response.data._id,
+        });
 
-    //   console.log(data);
-    //   setCharData(data);
-    // };
-    // fetchData();
-  }, [showMonth]);
+        const summaryDataRes = await axiosInstance.post("/api/summary-data", {
+          userId:response.data._id,
+        })
+
+        setBudgetData(budgetData.data);
+        setSessionData(response.data);
+        setSummaryData(summaryDataRes.data);
+        setIsLoading(false)
+        if (showMonth && helpers.checkIsValidMonth(showMonth) == new Date().getMonth + 1) {
+          setCharData()
+        }
+      
+      } catch(e) {
+        console.log(e);
+      }
+    }
+    fetchSessionData();
+    
+  }, [selectedMonth, expenseAmount, setIncomeMonth, showMonth]);
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const response = await axiosInstance.post("/api/budget-data", {
+          userId: sessionData._id,
+          month: showMonth
+        });
+        setCharData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (showMonth) {
+      fetchChartData();
+    }
+  }, [showMonth, sessionData]);
 
 
 
 
+   
   const handleIncomeChange = (event) => {
     const input = event.target.value;
     
@@ -92,7 +240,7 @@ const Tracking = () => {
         alert("Please enter a positive number for estimated expense.");
         return;
     }
-    setEstimatedExpense(event.target.value);
+    setExpenseAmount(event.target.value);
   };
 
   const handleMonthChange = (event) => {
@@ -104,7 +252,13 @@ const Tracking = () => {
   };
 
   const handleShowMonthChange = (event) => {
-    setShowMonth(event.target.value);
+    if (helpers.checkIsValidMonth(event.target.value) > new Date().getMonth() + 1) {
+      alert("You can only show your current or past month budget")
+      setShowMonth(new Date().toLocaleString('default', { month: 'long' }))
+    } else {
+      setShowMonth(event.target.value);
+    }
+    
   };
 
   const handleCategoryExpenseChange = (event) => {
@@ -162,290 +316,353 @@ const Tracking = () => {
     setSavingGoal(event.target.value);
   }
 
-  const handleSetClick = () => {
-    if (selectedMonth) {
+  const handleSetClick = async (event) => {
+    event.preventDefault();
+    if (!selectedMonth || !estimatedIncome || !savingGoal) {
+      return alert("Pleas fill out all the fields")
+    }
+    if (helpers.checkIsValidMonth(selectedMonth) < new Date().getMonth() + 1) {
+        return alert("You can only set goal for current or future month ")
+      }
+    if (savingGoal >= estimatedIncome ) {
+      alert("Saving goals should less than estimated income")
+      
+    } else {
+      try {
+      const response = await axiosInstance.post("/api/set-goal", {
+        userId: sessionData._id,
+        month: selectedMonth,
+        estimatedIncome: estimatedIncome,
+        savingGoal: savingGoal,
+      });
+
+        alert("Set Goal Successfully")
+        setEstimatedIncome(null);
+        setSavingGoal(null);
+        setSelectedMonth(null)
+      } catch (error) {
+        console.error(error);
+      }
+
       setEstimatedIncome(0);
       setSavingGoal(0);
     }
+    
+
   };
 
-  const handleUpdateClick = () => {
-        if (isNaN(estimatedIncome) || estimatedIncome < 0) {
-            alert("Please enter a valid updated income.");
-            return;
-        }
+  const handleUpdateClick = async() => {
+      if (helpers.checkIsValidMonth(incomeMonth) > new Date().getMonth() + 1) {
+        return alert("You can only update income for current or past month ")
+      }
+      if (!incomeMonth || !updatedIncomeDescription || !updatedIncome) {
+        return alert("Pleas fill out all the fields");
+      } else {
+        try {
+          const response = await axiosInstance.post("/api/update-income", {
+            userId: sessionData._id,
+            updatedIncome: updatedIncome,
+            updatedMonth: incomeMonth,
+            description: updatedIncomeDescription
+          }); // update the charData   
+            alert("Update Income Successfully")
+            setUpdatedIncome(null);
+            setIncomeMonth(null);
+            setUpdatedIncomeDescription(null)
+        } catch (error) {
+            console.error(error);
+          }
+
+         
     
+        }
+        
     } 
 
 
-  const handleAddClick = () => {
+  const handleAddClick = async (event) => {
+    event.preventDefault();
+    if (!budgetData) {
+      alert("You need set goal for current month before add expense")
+    }
     if (selectedCategory && expenseAmount) {
-      const newChartData = charData.map((item) => {
-        if (item.category === selectedCategory) {
-          return {
-            category: item.category,
-            amount: item.amount + parseInt(expenseAmount),
-          };
-        } else {
-          return item;
+      try {
+        const response = await axiosInstance.post("/api/add-expense", {
+          userId: sessionData._id,
+          category: selectedCategory,
+          amount: expenseAmount,
+          description: expenseDescription
+        });
+  
+          alert("Add Expense Successfully")
+          setSelectedCategory(null);
+          setExpenseAmount("");
+          setExpenseDescription("");
+        } catch (error) {
+          console.error(error);
         }
-      });
-      setCharData(newChartData);
-      setExpenseAmount(0);
-      setSelectedCategory(null);
+
+      // // update the charData
+      // const newChartData = charData.map((item) => {
+      //   if (item.category === selectedCategory) {
+      //     return {
+      //       category: item.category,
+      //       amount: item.amount + parseInt(expenseAmount),
+      //     };
+      //   } else {
+      //     return item;
+      //   }
+      // });
+      // setCharData(newChartData);
+    } else {
+      return alert("Pleas fill out all the fields")
     }
   };
 
   const now = new Date();
   
-
-  
   
 
-  return (
-    <div className="container">
 
-      <div className="info-bar">
-        <h2>{now.toLocaleString('default', { month: 'long' })} {now.getDate()} </h2>
-        <h2>Your Estimated Income: {budgetData && budgetData.totalIncome ? budgetData.totalIncome : "$3000"}</h2>
-        <h2>$2800 left to spend</h2>
-      </div>
-      <div className="input-part">
-
-      <div className="set-goal">
-      <h2>Set Your Goal</h2>
-      <div className="form-container">
-        <div className="form-input">
-          <label htmlFor="estimated-income">Estimated Income:</label>
-          <input
-            type="number"
-            id="estimated-income"
-            value={estimatedIncome}
-            onChange={handleIncomeChange}
-          />
-        </div>
-
-        <div className="form-input">
-          <label htmlFor="saving-goal">Saving Goal:</label>
-          <input
-            type="number"
-            id="saving-goal"
-            value={savingGoal}
-            onChange={handleSavingGoalChange}
-          />
-        </div>
-
-        {/* <div className="form-input">
-          <label htmlFor="estimated-expense">Estimated Expense:</label>
-          <input
-            type="number"
-            id="estimated-expense"
-            value={estimatedExpense}
-            onChange={handleExpenseChange}
-          />
-        </div> */}
-
-        <div className="form-input">
-          <label htmlFor="month-selection">Select Month:</label>
-          <div className="select-container"><select
-            id="month-selection"
-            value={selectedMonth}
-            onChange={handleMonthChange}>
-            <option value="">Select a Month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
-          </div>
-          
-        </div>
-
-        <button className="add-btn">Set</button>
-       </div>
+  if (token) {
+    if (isLoading) {
+    return <h1>Loading</h1>
+   }
+    return (
     
-     <div className="add-expense">
-        <h2>Add Expense</h2>
+  
+    <div className="container">
+     
+      {budgetData ? <div className="info-bar">
+        <h2>{now.toLocaleString('default', { month: 'long' })} {now.getDate()} </h2>
+        <h2>Estimated Income: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.income[budgetData.income.length - 1].amount : "$3000"}</h2>
+        <h2>Saving Goal: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.savingGoal : "$3000"}</h2>
+        <h2>{budgetData.leftToSpend}$ left to spend</h2>
+      </div> : (
+        <h2>You haven't set goal for this month. Let's set it below!</h2>
+      )}
+      
+      <div className="trackingForm-container">
+      <div className="set-goal">
+      <Tooltip title="You can set your goal for current or next month in this year">
+      <IconButton>
+      <HelpIcon />
+      </IconButton>
+      </Tooltip>
+        <form >
+        <Typography variant="h5" component="h1" align="center">
+        Set Your Goal
+        </Typography>
+        <TextField
+          fullWidth
+          required
+          label="Estimated Income"
+          value={estimatedIncome}
+          onChange={handleIncomeChange}
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          required
+          label="Saving Goal"
+          value={savingGoal}
+          onChange={handleSavingGoalChange}
+          margin="normal"
+        />
+        <InputLabel id="month-select-label">Month</InputLabel>
+        <Select
+          labelId="month-select-label"
+          id="month-select"
+          value={selectedMonth}
+          label="Month"
+          onChange={handleMonthChange}
+        >
+          {monthOptions.map((month) => (
+            <MenuItem key={month} value={month}>
+              {month}
+            </MenuItem>
+          ))}
+        </Select>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 3 }}
+          onClick={handleSetClick}
+        >
+        Set
+        </Button>
+        </form>
       </div>
-      <div className="addExpenseForm">
-        <div className="form-input">
-          <label htmlFor="expense-amount">Expense amount:</label>
-          <input
-            type="number"
-            id="expense-amount"
-            value={expenseAmount}
-            onChange={handleCategoryExpenseChange}
-          />
-        </div>
-        <div className="form-input">
-          <label htmlFor="expense-category">Expense category:</label>
-          <select
-            id="expense-category"
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-          >
-            <option value="">Select a Category</option>
-            <option value="Food and groceries">Food and groceries</option>
-            <option value="Housing and utilities">Housing and utilities</option>
-            <option value="Transportation">Transportation</option>
-            <option value="Personal care">Personal care</option>
-            <option value="Entertainment">Personal care</option>
-            
-          </select>
+    
+      <div className="add-expense">
+        <form >
+        <Tooltip title="Add expense for current month">
+        <IconButton>
+        <HelpIcon />
+        </IconButton>
+        </Tooltip>
+        <Typography variant="h5" component="h1" align="center">
+        Add Expenses
+        </Typography>
+        <TextField
+          fullWidth
+          required
+          label="Expense amount"
+          value={expenseAmount}
+          onChange={handleExpenseChange}
+          margin="normal"
+        />
+        <InputLabel id="category-select-label">Category</InputLabel>
+        <Select
+          labelId="category-select-label"
+          id="category-select-label"
+          value={selectedCategory}
+          label="Category"
+          onChange={handleCategoryChange}
+        >
+          {categoryOptions.map((category) => (
+            <MenuItem key={category} value={category}>
+              {category}
+            </MenuItem>
+          ))}
+        </Select>
+        <TextField
+          fullWidth
+          required
+          label="Expense Description"
+          value={expenseDescription}
+          onChange={handleExpenseDescriptionChange}
+          margin="normal"
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 3 }}
+          onClick={handleAddClick}
+        >
+        Add
+        </Button>
+        </form>
+      </div> 
 
-        </div>
-        <div className="form-input">
-          <label htmlFor="expense-description">Expense description:</label>
-          <input
-            type="string"
-            id="expense-description"
-            value={expenseDescription}
-            onChange={handleExpenseDescriptionChange}
-          />
-
-        </div>
-        {/* <div className="form-input">
-          <label htmlFor="month-selection">Select Month:</label>
-          <div className="select-container">
-            <select
-            id="month-selection"
-            value={addExpenseMonth}
-            onChange={handleAddMonthChange}
-          >
-            <option value="">Select a Month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
-          </div> */}
-          
-        
-        <button className="add-btn">Add</button>
-      </div>
-      </div>
 
       <div className="update-income">
-      <h2>Update Income</h2>
-      <h3>If your actual income is lower or higher than your estimated income, you can update it here</h3>
-      <div className="form-container">
-        <div className="form-input">
-          <label htmlFor="updated-income">Updated Income:</label>
-          <input
-            type="number"
-            id="updated-income"
-            value={updatedIncome}
-            onChange={handleUpdateIncome}
-          />
-        </div>
-
-        <div className="form-input">
-          <label htmlFor="updatedIncome-description">Description:</label>
-          <input
-            type="string"
-            id="updatedIncome-description"
-            value={updatedIncomeDescription}
-            onChange={handleIncomeDescriptionChange}
-          />
-        </div>
-
-        <div className="form-input">
-          <label htmlFor="month-selection">Select Month:</label>
-          <div className="select-container"><select
-            id="month-selection"
-            // value={selectedMonth}
-            onChange={handleIncomeMonthChange}>
-            <option value="">Select a Month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
-          </div>
-          <button onClick={handleUpdateClick}>Update Income</button>
-          
-        </div>
-        </div>
+        <form >
+        <Tooltip title="If you find your actual income is lower or higher that your estimated income after that month, you can update it here.">
+        <IconButton>
+        <HelpIcon />
+        </IconButton>
+        </Tooltip>
+        <Typography variant="h5" component="h1" align="center">
+        Update Income
+        </Typography>
+        <TextField
+          fullWidth
+          required
+          label="Updated Income"
+          value={updatedIncome}
+          onChange={handleUpdateIncome}
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          required
+          label="Expense Description"
+          value={updatedIncomeDescription}
+          onChange={handleIncomeDescriptionChange}
+          margin="normal"
+        />
+        <InputLabel id="incomeMonth-select-label">Month</InputLabel>
+        <Select
+          labelId="incomeMonth-select-label"
+          id="incomeMonth-select"
+          value={incomeMonth}
+          label="Month"
+          onChange={handleIncomeMonthChange}
+        >
+          {monthOptions.map((month) => (
+            <MenuItem key={month} value={month}>
+              {month}
+            </MenuItem>
+          ))}
+        </Select>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 3 }}
+          onClick={handleUpdateClick}
+        >
+        Update
+        </Button>
+        </form>
+      </div>
+      </div>
 
 
       <div className="chart-container">
-        <h2>Visualization of your Expense</h2>
-        <div className="form-input">
-          <label htmlFor="month-selection">Select Month:</label>
-          <div className="select-container">
-            <select
-            id="month-selection"
-        
+        <div className="expense-chart">
+          <h2> Visualization of your Expense </h2>
+          <InputLabel id="chartMonth-select-label">Month</InputLabel>
+          <Select
+            labelId="chartMonth-select-label"
+            id="chartMonth-select"
+            value={showMonth}
+            label="Month"
             onChange={handleShowMonthChange}
           >
-            <option value="">Select a Month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
-          </div>
-          
-        </div>
-        <div className="form-input">
-          <label htmlFor="charts-selection">Select Charts Type:</label>
-          <div className="select-container">
-            <select
-            id="charts-selection"
+            {monthOptions.map((month) => (
+              <MenuItem key={month} value={month}>
+                {month}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="chartType-selection">Select Chart Type</InputLabel>
+          <Select
+            labelId="chartType-selection"
+            id="chartType-selection"
             value={selectedChart}
+            label="Select Charts Type"
             onChange={handleChartsChange}
           >
-            <option value="">Select a Month</option>
-            <option value="BarChart">Histogram</option>
-            <option value="pie">Pie</option>
-          </select>
-          </div>
-          
+            {chartTypeOptions.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+          {charData && <ChartComponent chartType={selectedChart} chartData={parseChartData(charData)} title={showMonth}/>}
         </div>
-        <ChartComponent chartType={selectedChart} chartData={charData} title={showMonth}/>
-
-        <h2>Saving Summary</h2>
-
-        <ChartComponent chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
-        <ChartComponent chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
-        <ChartComponent chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
+        
+        <div className="saving-chart">
+          <h2>Saving Summary</h2>
+          <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Saving")} title="Monthly Saving" />
+          <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Income")} title="Monthly Income" />
+          <ChartComponent chartType="line" chartData={parseSummaryData(summaryData, "Monthly Expense")} title="Monthly Expense" />
+        </div>
       </div>
+
+
+
     </div>
-    </div>
-    </div>
+
+
   );
+  } else {
+
+    return (
+      <div>
+       <Link to="/auth/login" style={{ fontSize: '20px' }}>Login First! Go to login page</Link>
+      </div>
+    );
+    
+  }
+  
 };
 
 export default Tracking;

@@ -171,7 +171,7 @@ const Navbar = () => {
             </Button>
             <Button sx={{ my: 2, color: "white", display: "block" }}>
               <NavLink
-                to="/transaction"
+                to="/tracking"
                 style={{
                   textDecoration: "none",
                   color: "inherit",
