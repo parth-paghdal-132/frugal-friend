@@ -1,0 +1,270 @@
+[
+    {
+      "_id": {
+        "$oid": "6444ccaae68c8e142e1c4941"
+      },
+      "info": {
+        "user": {
+          "_id": {
+            "$oid": "64448673b023d1482d198af7"
+          },
+          "username": "abc123",
+          "email": "123@gmail.com"
+        },
+        "month": 1,
+        "year": 2023
+      },
+      "income": [
+        {
+          "amount": 5000,
+          "description": "Salary",
+          "date": "1/1"
+        }
+      ],
+      "expense": [
+        {
+          "category": "Food and groceries",
+          "amount": 50,
+          "description": "Groceries",
+          "date": "1/5"
+        },
+        {
+          "category": "Food and groceries",
+          "amount": 30,
+          "description": "Dinner",
+          "date": "1/12"
+        },
+        {
+          "category": "Housing and utilities",
+          "amount": 800,
+          "description": "Rent",
+          "date": "1/1"
+        },
+        {
+          "category": "Housing and utilities",
+          "amount": 50,
+          "description": "Internet",
+          "date": "1/15"
+        },
+        {
+          "category": "Transportation",
+          "amount": 20,
+          "description": "Bus fare",
+          "date": "1/7"
+        },
+        {
+          "category": "Transportation",
+          "amount": 40,
+          "description": "Gasoline",
+          "date": "1/20"
+        },
+        {
+          "category": "Personal care",
+          "amount": 15,
+          "description": "Haircut",
+          "date": "1/10"
+        },
+        {
+          "category": "Personal care",
+          "amount": 20,
+          "description": "Toiletries",
+          "date": "1/25"
+        },
+        {
+          "category": "Entertainment",
+          "amount": 30,
+          "description": "Movie tickets",
+          "date": "1/8"
+        },
+        {
+          "category": "Entertainment",
+          "amount": 50,
+          "description": "Concert tickets",
+          "date": "1/30"
+        }
+      ],
+      "totalExpense": 305,
+      "points": 0,
+      "leftToSpend": 4695,
+      "savingGoal": 2000
+    },
+    {
+        "_id": {
+          "$oid": "6444ccaae68c8e142e1c4942"
+        },
+        "info": {
+          "user": {
+            "_id": {
+              "$oid": "64448673b023d1482d198af7"
+            },
+            "username": "abc123",
+            "email": "123@gmail.com"
+          },
+          "month": 2,
+          "year": 2023
+        },
+        "income": [
+          {
+            "amount": 4500,
+            "description": "Monthly salary",
+            "date": "2/1"
+          }
+        ],
+        "expense": [
+          {
+            "category": "Food and groceries",
+            "amount": 30,
+            "description": "Groceries",
+            "date": "2/1"
+          },
+          {
+            "category": "Food and groceries",
+            "amount": 20,
+            "description": "Takeout",
+            "date": "2/3"
+          },
+          {
+            "category": "Housing and utilities",
+            "amount": 800,
+            "description": "Rent",
+            "date": "2/1"
+          },
+          {
+            "category": "Housing and utilities",
+            "amount": 100,
+            "description": "Utilities",
+            "date": "2/15"
+          },
+          {
+            "category": "Transportation",
+            "amount": 50,
+            "description": "Gas",
+            "date": "2/10"
+          },
+          {
+            "category": "Transportation",
+            "amount": 25,
+            "description": "Parking",
+            "date": "2/17"
+          },
+          {
+            "category": "Personal care",
+            "amount": 15,
+            "description": "Toiletries",
+            "date": "2/8"
+          },
+          {
+            "category": "Personal care",
+            "amount": 35,
+            "description": "Haircut",
+            "date": "2/22"
+          },
+          {
+            "category": "Entertainment",
+            "amount": 10,
+            "description": "Movie rental",
+            "date": "2/5"
+          },
+          {
+            "category": "Entertainment",
+            "amount": 20,
+            "description": "Dinner with friends",
+            "date": "2/12"
+          }
+        ],
+        "totalExpense": 605,
+        "points": 0,
+        "leftToSpend": 2895,
+        "savingGoal": 2000
+      },
+
+      {
+        "_id": {
+          "$oid": "123456789012345678901234"
+        },
+        "info": {
+          "user": {
+            "_id": {
+              "$oid": "64448673b023d1482d198af7"
+            },
+            "username": "abc123",
+            "email": "123@gmail.com"
+          },
+          "month": 3,
+          "year": 2023
+        },
+        "income": [
+          {
+            "amount": 4500,
+            "description": "Salary",
+            "date": "3/1"
+          }
+        ],
+        "expense": [
+          {
+            "category": "Food and groceries",
+            "amount": 50,
+            "description": "Groceries",
+            "date": "3/1"
+          },
+          {
+            "category": "Food and groceries",
+            "amount": 20,
+            "description": "Eating out",
+            "date": "3/2"
+          },
+          {
+            "category": "Housing and utilities",
+            "amount": 800,
+            "description": "Rent",
+            "date": "3/1"
+          },
+          {
+            "category": "Housing and utilities",
+            "amount": 50,
+            "description": "Internet",
+            "date": "3/15"
+          },
+          {
+            "category": "Transportation",
+            "amount": 30,
+            "description": "Gas",
+            "date": "3/5"
+          },
+          {
+            "category": "Transportation",
+            "amount": 20,
+            "description": "Parking",
+            "date": "3/15"
+          },
+          {
+            "category": "Personal care",
+            "amount": 10,
+            "description": "Shampoo",
+            "date": "3/10"
+          },
+          {
+            "category": "Personal care",
+            "amount": 15,
+            "description": "Toothpaste",
+            "date": "3/20"
+          },
+          {
+            "category": "Entertainment",
+            "amount": 20,
+            "description": "Movie tickets",
+            "date": "3/7"
+          },
+          {
+            "category": "Entertainment",
+            "amount": 30,
+            "description": "Concert tickets",
+            "date": "3/20"
+          }
+        ],
+        "totalExpense": 225,
+        "points": 0,
+        "leftToSpend": 4275,
+        "savingGoal": 2000
+      }
+]
