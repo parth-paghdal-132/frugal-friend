@@ -68,3 +68,29 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Steps to run Project
+
+### run `npm install` inside main directory
+
+### cd into `backend`
+
+### run `npm install` inside this directory
+
+### run `npm run seed` inside this directory
+
+### run `npm start` inside this directory
+
+### cd back to main directory
+
+### run `npm start` inside this main directory
+
+### For seeing emails that are being generated to user accounts navigate to `ethereal.email`
+
+### Click login in the top right
+
+### Use these credentials:
+ `username: drake89@ethereal.email`
+ `password: MmWReUxfnUfsGxKe2U`
+
+### Click on `open Mailbox` to view emails that are sent

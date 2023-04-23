@@ -12,6 +12,9 @@ async function main() {
     const users = mongoCollections.users
     const userCollection = await users()
 
+    const tracking = mongoCollections.tracking;
+    const trackingCollection = await tracking();
+
     let regina = null
     let shirley = null
     let ted = null
@@ -94,6 +97,63 @@ async function main() {
         source: "app"
     }
     await userCollection.insertOne(becky)
+
+    let reginaExpense1 = {
+        _id: new ObjectId(),
+        info: {
+            user: {
+                _id: regina._id,
+                username: regina.username,
+                email: regina.email
+            },
+            month: 4,
+            year: 2023
+        },
+        income: [
+            {
+                amount: 2000,
+                description: 'monghtly income',
+                date: "4/13"
+            }
+        ],
+        expense: [
+            {
+                category: 'Entertainment',
+                amount: 20,
+                description: 'Mario Movie tickets'
+            },
+            {
+                category: 'Food and groceries',
+                amount: 110,
+                description: 'Shoprite run'
+            },
+            {
+                category: 'Transportation',
+                amount: 45,
+                description: 'gas'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 1200,
+                description: 'rent'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 110,
+                description: 'gas and electric'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 25,
+                description: 'internet'
+            }
+        ],
+        totalExpense: 1510,
+        leftToSpend: 90,
+        savingGoal: 400
+    }
+    await trackingCollection.insertOne(reginaExpense1);
+
 
 
     await connection.closeConnection()

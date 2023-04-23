@@ -98,10 +98,7 @@ const Navbar = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link
-                  to="/transation"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
+                <Link to="/tracking" style={{textDecoration: 'none', color: 'inherit'}}>
                   <Typography textAlign="center">Add Transaction</Typography>
                 </Link>
               </MenuItem>

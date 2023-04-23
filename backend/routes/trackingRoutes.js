@@ -24,14 +24,19 @@ const monthlyExpenses = [
 
 // retrieve current month whole budget data
 router.get('/api/budget-data', async (req, res) => {
+
+  if (!req.session.user) {
+    return res.status(403).json({errors: "You are not logged in!"});
+  }
+
     let month;
-    if (req.body.month) {
-        month = xss(req.body.month)
+    if (req.query.month) {
+        month = xss(req.query.month)
     }
     
-    let year = req.body.year ? req.body.year : new Date().getFullYear();
+    let year = req.query.year ? req.query.year : new Date().getFullYear();
     year = Number(xss(year));
-    let userId = xss(req.body.userId);
+    let userId = req.session.user._id.toString();
 
     try {
         helpers.checkIsProperString(userId);
