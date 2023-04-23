@@ -52,6 +52,10 @@ ul a:hover {
   font-size: 1.2rem;
 }
 
+.chart-title {
+  text-align: center 
+}
+
 .select-container {
   position: relative;
   width: 150px;

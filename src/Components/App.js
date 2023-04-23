@@ -8,6 +8,7 @@ import Tracking from './Tracking';
 import Home from "./Home";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
+import Budget from "./Budget";
 
 const theme = createTheme({
   palette: {
@@ -127,6 +128,7 @@ function App() {
             <Route path="/myProfile" element={<MyProfile/>} />
             <Route path="/user-profile/:userId" element={<UsersProfile />} />
             <Route path='/Tracking' element={<Tracking />} />
+            <Route path='/budget' element={<Budget />} />
           </Routes>
 			  </div>
     	  </Router>

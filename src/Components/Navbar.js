@@ -93,7 +93,7 @@ const Navbar = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/transation" style={{textDecoration: 'none', color: 'inherit'}}>
+                <Link to="/tracking" style={{textDecoration: 'none', color: 'inherit'}}>
                   <Typography textAlign="center">Add Transaction</Typography>
                 </Link>
               </MenuItem>
@@ -145,7 +145,7 @@ const Navbar = () => {
               sx={{ my: 2, color: 'white', display: 'block' }}
               >
               <NavLink
-                to="/transaction"
+                to="/tracking"
                 style={{
                   textDecoration: 'none',
                   color: 'inherit'
@@ -188,7 +188,7 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Link to="/profile" style={{textDecoration: 'none', color: 'inherit'}}>
+                <Link to="/myprofile" style={{textDecoration: 'none', color: 'inherit'}}>
                   <Typography textAlign="center">View Profile</Typography>
                 </Link>
               </MenuItem>

@@ -8,18 +8,13 @@ const Tracking = () => {
   const [estimatedExpense, setEstimatedExpense] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [incomeMonth, setIncomeMonth] = useState(null);
-  const [showMonth, setShowMonth] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [expenseAmount, setExpenseAmount] = useState(0);
-  const [selectedChart, setSelectedChart] = useState('BarChart');
   const [updatedIncome, setUpdatedIncome] = useState(0);
   const [savingGoal, setSavingGoal] = useState(0);
   const [budgetData, setBudgetData] = useState(null);
   const [expenseDescription, setExpenseDescription] = useState("");
   const [updatedIncomeDescription, setUpdatedIncomeDescription] = useState("");
-  
-  
-
   
   // test data
   const data = [
@@ -44,19 +39,6 @@ const Tracking = () => {
   const [charData, setCharData] = useState(data);
 
   const [monthlySaving, setMonthlySaving] = useState(monthlyExpenses);
-
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   const data = await ///// fetch from database
-
-    //   console.log(data);
-    //   setCharData(data);
-    // };
-    // fetchData();
-  }, [showMonth]);
-
-
-
 
   const handleIncomeChange = (event) => {
     const input = event.target.value;
@@ -103,20 +85,12 @@ const Tracking = () => {
     setIncomeMonth(event.target.value);
   };
 
-  const handleShowMonthChange = (event) => {
-    setShowMonth(event.target.value);
-  };
-
   const handleCategoryExpenseChange = (event) => {
     setExpenseAmount(event.target.value);
   }
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
-  }
-
-  const handleChartsChange = (event) => {
-    setSelectedChart(event.target.value);
   }
 
   const handleExpenseDescriptionChange = (event) => {
@@ -297,7 +271,7 @@ const Tracking = () => {
             <option value="Housing and utilities">Housing and utilities</option>
             <option value="Transportation">Transportation</option>
             <option value="Personal care">Personal care</option>
-            <option value="Entertainment">Personal care</option>
+            <option value="Entertainment">Entertainment</option>
             
           </select>
 
@@ -392,56 +366,7 @@ const Tracking = () => {
         </div>
 
 
-      <div className="chart-container">
-        <h2>Visualization of your Expense</h2>
-        <div className="form-input">
-          <label htmlFor="month-selection">Select Month:</label>
-          <div className="select-container">
-            <select
-            id="month-selection"
-        
-            onChange={handleShowMonthChange}
-          >
-            <option value="">Select a Month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
-          </div>
-          
-        </div>
-        <div className="form-input">
-          <label htmlFor="charts-selection">Select Charts Type:</label>
-          <div className="select-container">
-            <select
-            id="charts-selection"
-            value={selectedChart}
-            onChange={handleChartsChange}
-          >
-            <option value="">Select a Month</option>
-            <option value="BarChart">Histogram</option>
-            <option value="pie">Pie</option>
-          </select>
-          </div>
-          
-        </div>
-        <ChartComponent chartType={selectedChart} chartData={charData} title={showMonth}/>
-
-        <h2>Saving Summary</h2>
-
-        <ChartComponent chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
-        <ChartComponent chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
-        <ChartComponent chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
-      </div>
+      
     </div>
     </div>
     </div>

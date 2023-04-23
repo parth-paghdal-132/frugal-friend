@@ -9,7 +9,7 @@ const app = express()
 app.use("/public", public)
 app.use("/uploads", uploads)
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.json({limit: '100mb'}));
 
 const corsOptions = {
     origin: 'http://localhost:3000',
