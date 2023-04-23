@@ -277,6 +277,10 @@ const monthOptions = [
     setUpdatedIncomeDescription(event.target.value);
   }
 
+  const handleSelectedChart = (event) => {
+    setSelectedChart(event.target.value)
+  }
+
   const handleUpdateIncome = (event) => {
 
     const input = event.target.value;
@@ -624,7 +628,7 @@ const monthOptions = [
             id="chartType-selection"
             value={selectedChart}
             label="Select Charts Type"
-            onChange={handleChartsChange}
+            onChange={handleSelectedChart}
           >
             {chartTypeOptions.map((type) => (
               <MenuItem key={type} value={type}>
