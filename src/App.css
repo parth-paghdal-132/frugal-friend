@@ -33,63 +33,33 @@ ul a:hover {
     transform: rotate(0deg);
   }
 }
+  .select-container select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: white; 
+    font-size: 16px;
+    color: #495057;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+  }
   
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.form-input {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1rem;
-  align-items: center;
-}
-
-.form-input label {
-  margin-right: 1rem;
-  font-size: 1.2rem;
-}
-
-.chart-title {
-  text-align: center 
-}
-
-.select-container {
-  position: relative;
-  width: 150px;
-  margin: 0 10px;
-}
-
-.select-container select {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 16px;
-  color: #495057;
-  appearance: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.select-container select::-ms-expand {
-  display: none;
-}
-
-.select-container::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  color: #6c757d;
-  pointer-events: none;
-}
+  .select-container select::-ms-expand {
+    display: none;
+  }
+  
+  .select-container::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+  }
 
 
   .form-container {
@@ -115,4 +85,21 @@ ul a:hover {
     position: relative;
     width: 150px;
     margin: 0 10px;
+  }
+
+  .set-goal,
+  .add-expense,
+  .update-income {
+    width: 30%
+  }
+  .add-expense {
+    height: 100%;
+  }
+  .trackingForm-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .chart-container {
+    margin-top: 10%;
   }

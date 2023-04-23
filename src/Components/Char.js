@@ -38,7 +38,7 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
       </ResponsiveContainer>
       </div>
     );
-  } else if (chartType === 'pie') {
+  } else if (chartType === 'Pie') {
     chartJsx = (
       <div style={{width: "100%"}}>
         <h2 className="chart-title">{title}'s Expenses</h2>
@@ -82,9 +82,9 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="category" />
         <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="amount" fill="transparent">
+        <Tooltip formatter={(category, amount) => [category, amount]}/>
+        {/* <Legend /> */}
+        <Bar dataKey="amount" fill="red">
         {
           chartData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'][index % 5]} />
