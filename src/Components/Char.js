@@ -26,7 +26,7 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
     chartJsx = (
       <div>
       <h3 className="chart-title">{title}</h3>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="95%" height={400}>
         <LineChart ref={ref} data={chartData}>
           <XAxis dataKey="month"/>
           <YAxis />
