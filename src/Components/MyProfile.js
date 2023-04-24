@@ -1,4 +1,4 @@
-import { Delete, Edit, Email, Facebook, Instagram, Key, Notes, Person, Rtt, Twitter, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Delete, Edit, Email, Facebook, Instagram, Key, Notes, Person, Twitter, Visibility, VisibilityOff } from "@mui/icons-material"
 import { Alert, Box, Button, Divider, FormControl, FormHelperText, Grid, IconButton, Input, InputAdornment, InputLabel, Modal, Stack, Typography } from "@mui/material"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import usersValidations from '../helpers/usersValidations'
@@ -126,7 +126,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showErrorData(errorData)
@@ -262,7 +262,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showErrorData(errorData)
@@ -293,7 +293,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showPasswordErrorData(errorData)
@@ -323,7 +323,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showPasswordErrorData(errorData)
@@ -405,6 +405,12 @@ function MyProfile() {
             return "Set"
         }
     }
+
+    function removeUserFromLocalStorage() {
+		localStorage.removeItem("token")
+		localStorage.removeItem("user")
+        window.dispatchEvent(new Event("storage"))
+	}
 
     let token = localStorage.getItem("token")
     if(!token) {

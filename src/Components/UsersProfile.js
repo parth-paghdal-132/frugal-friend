@@ -16,7 +16,6 @@ const boxStyle = {
 
 function UsersProfile() {
     let {userId} = useParams()
-    let theme = useTheme()
     
     const [image, setImage] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -48,7 +47,7 @@ function UsersProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showErrorData(errorData)
@@ -77,6 +76,12 @@ function UsersProfile() {
         setOtherError(errors.other)
     }
 
+    function removeUserFromLocalStorage() {
+		localStorage.removeItem("token")
+		localStorage.removeItem("user")
+        window.dispatchEvent(new Event("storage"))
+	}
+
     let token = localStorage.getItem("token")
     if(!token) {
         return <Navigate to="/auth/login" state={{otherError: "Please login see others' profile."}}/>
@@ -88,6 +93,14 @@ function UsersProfile() {
 
     if(apiCallState.loading) {
         return(<Alert severity="info" sx={{mt:3}}>Loading profile data</Alert>)
+    }
+    if(otherError) {
+        return <Grid container sx={{mt:3, mb:5}}>
+            <Grid item xs={12} direction="column" alignItems="center" textAlign="center" sx={{mt:5, mb:5}}>
+                <Typography variant="h4" component="h1">Profile information</Typography>
+                { otherError && <Alert severity="error" sx={{mt:3}}>{otherError}</Alert> }
+            </Grid>
+        </Grid>
     }
     return (
         <Grid container sx={{mt:3, mb:5}}>

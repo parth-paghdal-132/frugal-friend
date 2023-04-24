@@ -156,7 +156,7 @@ function Signup(){
             setApiCallState({...apiCallState, loading:false})
             if(response.status === 200) {
                 if(response.data.email) {
-                    localStorage.setItem("token", response.data.token)
+                    setUserToLocalStorage(response.data)
                     setApiCallState({...apiCallState, data: response.data})
                     navigate("/", { replace: true }, 1)
                 } else {
@@ -188,7 +188,13 @@ function Signup(){
         }
     }
 
-    let token = localStorage.getItem("token")
+    function setUserToLocalStorage(user) {
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
+        window.dispatchEvent(new Event("storage"))
+    }
+
+    const token = localStorage.getItem("token")
     if(token) {
         return <Navigate to="/"/>
     }

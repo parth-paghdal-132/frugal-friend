@@ -25,6 +25,7 @@ function Login(){
     const [password, setPassword] = useState("")
     const [txtPasswordError, setTxtPasswordError] = useState(null)
     const [otherError, setOtherError] = useState(state && state.otherError ? state.otherError : "")
+    const [successMessage, setSuccessMessage] = useState(state && state.successMessage ? state.successMessage : "")
 
     const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
 
@@ -74,7 +75,7 @@ function Login(){
             setApiCallState({...apiCallState, loading:false})
             if(response.status === 200) {
                 if(response.data.email) {
-                    localStorage.setItem("token", response.data.token)
+                    setUserToLocalStorage(response.data)
                     navigate("/", { replace: true }, 1)
                 } else {
                     showErrorData({other: "Could not log you in at this moment please try after some time."})
@@ -106,6 +107,12 @@ function Login(){
         }
     }
 
+    function setUserToLocalStorage(user) {
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
+        window.dispatchEvent(new Event("storage"))
+    }
+
     let token = localStorage.getItem("token")
     if(token) {
         return <Navigate to="/"/>
@@ -123,6 +130,9 @@ function Login(){
                             <Typography variant="h4">Login</Typography>
                             {otherError &&
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
+                            }
+                            {successMessage &&
+                                <Alert severity="success" sx={{mt:3}}>{successMessage}</Alert>                                
                             }
                         </Grid>
                         <Grid item xs={12} sx={{mt:4}}>

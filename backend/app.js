@@ -26,35 +26,6 @@ app.use(
     })
 )
 
-app.use("/auth", async(req, res, next) => {
-    if(req.session.user){
-        let errors = {}
-        errors.other = "You are already logged in."
-        errors.code = 403
-        return res.status(errors.code).json(errors)
-    } else {
-        next()
-    }
-})
-const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-    
-    if(req.body && req.body._method) {
-        req.method = req.body._method
-        delete req.body._method
-    }
-    
-    if(req.method === "POST" && req.originalUrl.startsWith("/service/alter-service")) {
-        req.method = "PUT"
-    }
-
-    if(req.method === "POST" && req.originalUrl === "/user/myprofile") {
-        req.method = "PUT"
-    }
-
-    next()
-}
-
-app.use(rewriteUnsupportedBrowserMethods)
 configRoutes(app)
 
 app.listen(4000, () => {

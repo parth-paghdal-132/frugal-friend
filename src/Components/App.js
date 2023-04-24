@@ -1,10 +1,6 @@
 import "../App.css";
-import { Button, createTheme, Grid, Paper, ThemeProvider, } from "@mui/material";
+import { createTheme,ThemeProvider, } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import {
-	NavLink,
-	Link,
-} from 'react-router-dom';
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
