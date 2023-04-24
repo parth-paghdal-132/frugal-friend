@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
+import Tracking from './Tracking';
 import Home from "./Home";
 import Logout from "./Logout";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
-import Tracking from './Tracking';
-
+import Budget from "./Budget";
 
 const theme = createTheme({
   palette: {
@@ -130,6 +130,7 @@ function App() {
             <Route path="/myProfile" element={<MyProfile />} />
             <Route path="/user-profile/:userId" element={<UsersProfile />} />
             <Route path='/Tracking' element={<Tracking />} />
+            <Route path='/budget' element={<Budget />} />
           </Routes>
         </div>
       </Router>

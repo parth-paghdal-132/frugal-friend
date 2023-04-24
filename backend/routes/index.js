@@ -2,12 +2,14 @@ const authRoutes = require("./authRoutes");
 const myProfileRoutes = require("./myProfileRoutes");
 const userProfileRoutes = require("./userProfileRoutes");
 const trackingRoutes = require("./trackingRoutes");
+const mailerRoutes = require("./mailerRoutes");
 
 const configRoutes = (app) => {
   app.use("/auth", authRoutes);
   app.use("/myprofile", myProfileRoutes);
   app.use("/user-profile", userProfileRoutes);
-  app.use("", trackingRoutes)
+  app.use("/budget", mailerRoutes);
+  app.use("", trackingRoutes);
 
   app.use("*", (req, res) => {
     return res.status(404).json({

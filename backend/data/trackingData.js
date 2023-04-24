@@ -22,11 +22,11 @@ const setGoal = async (userId, month, year, estimatedIncome, savingGoal) => {
     helpers.checkIsValidObjectId(userId);
 
     // check is proper month
-    if (helpers.checkIsValidMonth(month) === -1) {
-        throw new Error("Please provide valid month")
-      } else {
-          month = helpers.checkIsValidMonth(month);
-      }
+    // if (helpers.checkIsValidMonth(month) === -1) {
+    //     throw new Error("Please provide valid month")
+    //   } else {
+    //       month = helpers.checkIsValidMonth(month);
+    //   }
   
     // If the goal is for a previous month, don't allow modification, not making any sense right:)
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
@@ -89,11 +89,17 @@ const setGoal = async (userId, month, year, estimatedIncome, savingGoal) => {
         const returnUser = await userData.getUser(userId);
         const newGoal = ({
         info: { user: { _id: returnUser._id, username: returnUser.username, email: returnUser.email }, month, year },
-        income: [],
+        income: [
+          {
+            "amount": sanitizedEstimatedIncome,
+            "description": "Set the saving goal for this month",
+            "date": currentMonth + "/" + new Date().getDate()
+          }
+        ],
         expense: [],
         totalExpense: 0,
         points: 0,
-        leftToSpend: sanitizedEstimatedIncome,
+        leftToSpend: sanitizedEstimatedIncome - sanitizedSavingGoal,
         savingGoal: sanitizedSavingGoal
         });
 
@@ -238,11 +244,16 @@ async function getBudgetData(userId, month, year) {
 
     // check is proper month
     if (month) {
-        if (helpers.checkIsValidMonth(month) === -1) {
-            throw new Error("Please provide valid month")
+        if (typeof month == 'string' && isNaN(Number(month))) {
+            if (helpers.checkIsValidMonth(month) === -1) {
+              throw new Error("Please provide valid month")
+          } else {
+              month = helpers.checkIsValidMonth(month);
+          }
         } else {
-            month = helpers.checkIsValidMonth(month);
+           month = Number(month)
         }
+
     } else {
         month = new Date().getMonth() + 1;
     }
@@ -267,6 +278,24 @@ async function getBudgetData(userId, month, year) {
 
     return budget;
 }
+
+async function getSummaryData(userId) {
+  let month = new Date().getMonth() + 1;
+  let year = new Date().getFullYear()
+  helpers.checkIsProperString(userId);
+  let result = [];
+  const trackingCollection = await tracking();
+  for (let i = 1; i <= month; i++) {
+    const budget = await trackingCollection.findOne({ "info.user._id": new ObjectId(userId), "info.month": i, "info.year": year });
+    if (budget) {
+      result.push(budget);
+    } else {
+      result.push(i)
+    }
+    
+  }
+  return result;
+}
   
 
 
@@ -275,7 +304,8 @@ module.exports = {
     setGoal,
     addExpense,
     updateIncome,
-    getBudgetData
+    getBudgetData,
+    getSummaryData
 }
   
 

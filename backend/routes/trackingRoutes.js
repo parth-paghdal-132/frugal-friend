@@ -23,15 +23,20 @@ const monthlyExpenses = [
 ];
 
 // retrieve current month whole budget data
-router.get('/api/budget-data', async (req, res) => {
+router.post('/api/budget-data', async (req, res) => {
+
+  if (!req.session.user) {
+    return res.status(403).json({errors: "You are not logged in!"});
+  }
+
     let month;
-    if (req.body.month) {
-        month = xss(req.body.month)
+    if (req.query.month) {
+        month = xss(req.query.month)
     }
     
-    let year = req.body.year ? req.body.year : new Date().getFullYear();
+    let year = req.query.year ? req.query.year : new Date().getFullYear();
     year = Number(xss(year));
-    let userId = xss(req.body.userId);
+    let userId = req.session.user._id.toString();
 
     try {
         helpers.checkIsProperString(userId);
@@ -47,27 +52,37 @@ router.get('/api/budget-data', async (req, res) => {
         
         
         const budgetData = await trackingData.getBudgetData(userId, month, year);
-        if (budgetData == null) {
-            throw new Error("No budget data for this month")
-        }
-        res.json(budgetData);
+        // if (budgetData == null) {
+        //     throw new Error("No budget data for this month")
+        // }
+        return res.json(budgetData);
     } catch (e) {
         if (e === "No budget data for this month") {
-            res.status(404).send('No Data')
+          return res.status(404).send('No Data')
         }
         console.error(e.message);
-        res.status(500).send('Server Error');
+        return res.status(500).send('Server Error');
 
     }
 });
 
+router.post('/api/summary-data', async (req ,res) => {
+  try {
+     const userId = xss(req.body.userId).trim(); // session??
+     const response = await trackingData.getSummaryData(userId);
+     res.json(response);
+  } catch (e) {
+      console.error(e.message);
+      res.status(500).send('Server Error');
+  }
+})
 // retrieve current/other month  expense
 router.get('/api/expense-data', async (req, res) => {
     try {
         let month = xss(req.query.month).trim() || new Date().getMonth() + 1;
         let year = new Date().getFullYear();
         const expenses = await trackingData.getExpense(month, year);
-        res.json(expenses);
+        return res.json(expenses);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -197,7 +212,7 @@ router.post('/api/update-income', async (req, res) => {
   try {
     await trackingData.updateIncome(userId, updatedMonth, year, updatedIncome, description);
     return res.json({ message: 'Income updated successfully.' });
-  } catch {
+  } catch(e) {
     return res.status(500).send('Server Error');
   }
   
@@ -211,7 +226,7 @@ router.post('/api/add-expense', async (req, res) => {
 
 
   const year = new Date().getFullYear();
-  const month = new Date().getMonth + 1; 
+  const month = new Date().getMonth() + 1; 
   const userId = xss(req.body.userId).trim(); // session??
   const category = xss(req.body.category).trim();
   let amount = xss(req.body.amount).trim()
@@ -222,7 +237,7 @@ router.post('/api/add-expense', async (req, res) => {
   helpers.checkIsValidObjectId(userId);
 
   // Check the description
-  helpers.checkIsProperString(description);
+  // helpers.checkIsProperString(description);
 
   // Check if the value is a valid number
   if (!Number.isFinite(Number(amount))) {
@@ -259,5 +274,15 @@ router.post('/api/add-expense', async (req, res) => {
   // TODO: Implement database update code here
   res.json({ message: 'Expense added successfully.' });
 });
+
+router.route("/api/session").get(async (req, res) => {
+  if (req.session.user) {
+    return res.status(200).json(req.session.user);
+  } else {
+    return res.status(403).json({ other: "You are not logged in." });
+  }
+})
+
+
 
 module.exports = router;

@@ -1,14 +1,14 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
   
-  h1 {
-    margin-bottom: 2rem;
-    font-size: 3rem;
-  }
+h1 {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
 
 
 .App-header {
@@ -39,7 +39,7 @@ ul a:hover {
     padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    background-color: white;
+    background-color: white; 
     font-size: 16px;
     color: #495057;
     appearance: none;
@@ -85,4 +85,21 @@ ul a:hover {
     position: relative;
     width: 150px;
     margin: 0 10px;
+  }
+
+  .set-goal,
+  .add-expense,
+  .update-income {
+    width: 30%
+  }
+  .add-expense {
+    height: 100%;
+  }
+  .trackingForm-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .chart-container {
+    margin-top: 10%;
   }
