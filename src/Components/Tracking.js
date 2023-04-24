@@ -324,7 +324,7 @@ const monthOptions = [
     if (helpers.checkIsValidMonth(selectedMonth) < new Date().getMonth() + 1) {
         return alert("You can only set goal for current or future month ")
       }
-    if (savingGoal >= estimatedIncome ) {
+    if (Number(savingGoal) >= Number(estimatedIncome) ) {
       alert("Saving goals should less than estimated income")
       
     } else {
