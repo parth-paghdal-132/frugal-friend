@@ -39,14 +39,20 @@ const updateProfile = async (image, thumb, firstName, lastName, bio, username, f
         lastName: lastName,
     }
 
+    console.log('updating user', image);
     if(isProfilePictureChanged){
         userToUpdate.image = image
+    }
+
+    rewardData.updateUserInRedis(userFromDB, userToUpdate);
+
+    if(isProfilePictureChanged){
+        
         
         userFromDB.image = image
         userFromDB.thumb = thumb
     }
-    rewardData.updateUserInRedis(userFromDB, userToUpdate);
-
+    
     userFromDB.firstName = firstName
     userFromDB.lastName = lastName
     userFromDB.bio = bio

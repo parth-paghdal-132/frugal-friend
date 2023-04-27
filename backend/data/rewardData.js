@@ -71,6 +71,7 @@ const updateUserInRedis = async (oldUser, newUser) => {
     lastName: oldUser.lastName,
     image: oldUser.image
   }
+
   // find current user in redis
   let exists = await client.zScore('mostPoints', JSON.stringify(findUser));
   if (exists !== null) {
