@@ -39,7 +39,6 @@ const updateProfile = async (image, thumb, firstName, lastName, bio, username, f
         lastName: lastName,
     }
 
-    console.log('updating user', image);
     if(isProfilePictureChanged){
         userToUpdate.image = image
     }
