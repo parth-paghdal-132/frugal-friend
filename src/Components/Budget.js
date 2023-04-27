@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Cell, Legend, Tooltip, BarChart, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Bar, PieChart, Pie } from 'recharts';
-import {Button} from "@mui/material"
+import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material"
 import axiosInstance from "../config/axiosConfig"
 import ChartComponent from "./Char";
-import { ShowChart } from "@mui/icons-material";
+import { Navigate } from "react-router-dom";
 
 function Budget() {
   // state for dropdown menus and picking which month expense chart to render / email
@@ -47,16 +46,37 @@ function Budget() {
   const [monthlyExpense, setMonthlyExpense] = useState(monthlyExpenses);
   const [monthlyIncome, setMonthlyIncome] = useState(monthlyExpenses);
   const [charData, setCharData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
   const [monthlySaving, setMonthlySaving] = useState(monthlyExpenses);
 
   useEffect(() => {
     async function fetchExpenses() {
       try {
-        const {data} = await axiosInstance.get(`/api/budget-data?month=${showMonth}`);
-        setCharData(data.expense);
+        let {data} = await axiosInstance.post(`/api/budget-data?month=${showMonth}`);
+        setEmailData(data.expense);
+        // group same category amounts together
+        const startingMonthExpenses = {
+          "Food and groceries": 0,
+          "Housing and utilities": 0,
+          "Transportation": 0,
+          "Personal Care": 0,
+          "Entertainment": 0
+        }
+
+        data.expense.forEach((item) => {
+          startingMonthExpenses[item.category] += item.amount
+        })
+
+        let monthChartData = Object.keys(startingMonthExpenses).reduce((acc, item) => {
+          acc.push({ category: item, amount: startingMonthExpenses[item] })
+          return acc
+        }, []);
+
+        setCharData(monthChartData);
       } catch (e) {
         // potentially there is no budget data for this month
         setCharData([]);
+        setEmailData([]);
         console.log(e);
       }
     }
@@ -69,7 +89,7 @@ function Budget() {
       try {
         let emailBody = {
           chartUrl: monthExpensesIMG,
-          expense: charData,
+          expense: emailData,
           month: showMonth
         }
         setMonthExpensesIMG(undefined);
@@ -81,7 +101,7 @@ function Budget() {
     if (monthExpensesIMG) {
       createEmail();
     }
-  }, [monthExpensesIMG, charData, showMonth])
+  }, [monthExpensesIMG, emailData, showMonth])
 
   async function handleMonthEmail() {
     setGetImageClicked(true);
@@ -93,6 +113,11 @@ function Budget() {
 
   const handleChartsChange = (event) => {
     setSelectedChart(event.target.value);
+  }
+
+  let token = localStorage.getItem("token")
+  if (!token) {
+    return <Navigate to="/auth/login" state={{otherError: "Please login to view your budget."}} />;
   }
 
   return (
@@ -136,7 +161,7 @@ function Budget() {
             onChange={handleChartsChange}
           >
             <option value="BarChart">Histogram</option>
-            <option value="pie">Pie</option>
+            <option value="Pie">Pie</option>
           </select>
           </div>
         </div>
@@ -157,7 +182,7 @@ function Budget() {
               chartType={selectedChart} 
               chartData={charData} 
               title={showMonth} 
-              chartStyling={selectedChart === "pie" ? {width: '100%'} : {}}
+              chartStyling={selectedChart === "Pie" ? {width: '100%'} : {}}
             />
           </div>
         </div>
@@ -167,22 +192,12 @@ function Budget() {
 
 
       <h1 style={{textAlign: 'center'}}>Yearly Summaries</h1>
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
         <ChartComponent onChildData={handleMonthlySavingIMG} getImage={getImageClicked} chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
         <ChartComponent onChildData={handleMonthlyIncomeIMG} getImage={getImageClicked} chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
       </div>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <h3 className="chart-title">Monthly Expenses</h3>
-        <ResponsiveContainer width="75%" height={400}>
-          <LineChart data={monthlyExpense}>
-            <XAxis dataKey="month"/>
-            <YAxis />
-            <Line type="monotone" dataKey="amount" stroke="#8884d8" >
-            </Line>
-            <Tooltip />
-            <Legend />
-          </LineChart>
-        </ResponsiveContainer>
+      <div>
+        <ChartComponent onChildData={handleMonthlyIncomeIMG} getImage={getImageClicked} chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
       </div>
       <div style={{marginBottom: 100}}/>
     </div>

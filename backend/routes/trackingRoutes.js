@@ -158,10 +158,10 @@ router.post('/api/set-goal', async (req, res) => {
             res.status(400).json({ message: "Estimated income should be greater than saving goal"})
         }
     
-        await trackingData.setGoal(userId, month, year, estimatedIncome, savingGoal);
+        let newGoal = await trackingData.setGoal(userId, month, year, estimatedIncome, savingGoal);
     
         // Return success message
-        res.json({ message: "Saving goal set successfully." });
+        res.json({ message: "Saving goal set successfully.", ...newGoal });
       } catch (e) {
         console.error(e);
         res.status(500).send("Server Error");

@@ -5,6 +5,8 @@ const cors = require("cors")
 const public = express.static(__dirname + "/public")
 const uploads = express.static(__dirname + "/uploads")
 const app = express()
+const client = require("./config/redis");
+client.connect().then(() => {});
 
 app.use("/public", public)
 app.use("/uploads", uploads)

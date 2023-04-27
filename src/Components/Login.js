@@ -26,6 +26,7 @@ function Login(){
     const [txtPasswordError, setTxtPasswordError] = useState(null)
     const [otherError, setOtherError] = useState(state && state.otherError ? state.otherError : "")
     const [successMessage, setSuccessMessage] = useState(state && state.successMessage ? state.successMessage : "")
+    const [loginMessage, setLoginMessage] = useState(state && state.loginMessage ? state.loginMessage : "");
 
     const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
 
@@ -132,7 +133,10 @@ function Login(){
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
                             }
                             {successMessage &&
-                                <Alert severity="success" sx={{mt:3}}>{successMessage}</Alert>                                
+                                <Alert severity="success" sx={{mt:3}}>{successMessage}</Alert> 
+                            }                           
+                            {loginMessage && 
+                                <Alert severity="success" sx={{mt:3}}>{loginMessage}</Alert>
                             }
                         </Grid>
                         <Grid item xs={12} sx={{mt:4}}>
