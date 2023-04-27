@@ -8,6 +8,7 @@ const authData = data.authData;
 const LOGIN_SOURCE_GOOGLE = "google";
 
 router.route("/signup").post(async (req, res) => {
+  console.log('here?')
   let errors = {};
 
   if (req.session.user) {
@@ -174,7 +175,6 @@ router.route("/logout").get(async (req, res) => {
     return res.status(403).json({ other: "You are not logged in." });
   }
 });
-
 
 
 module.exports = router;

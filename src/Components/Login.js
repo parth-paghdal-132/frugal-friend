@@ -25,6 +25,7 @@ function Login(){
     const [password, setPassword] = useState("")
     const [txtPasswordError, setTxtPasswordError] = useState(null)
     const [otherError, setOtherError] = useState(state && state.otherError ? state.otherError : "")
+    const [loginMessage, setLoginMessage] = useState(state && state.loginMessage ? state.loginMessage : "");
 
     const [apiCallState, setApiCallState] = useState({loading: false, data: null, error: null})
 
@@ -123,6 +124,9 @@ function Login(){
                             <Typography variant="h4">Login</Typography>
                             {otherError &&
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
+                            }
+                            {loginMessage && 
+                                <Alert severity="success" sx={{mt:3}}>{loginMessage}</Alert>
                             }
                         </Grid>
                         <Grid item xs={12} sx={{mt:4}}>

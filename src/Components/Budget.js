@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Cell, Legend, Tooltip, BarChart, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Bar, PieChart, Pie } from 'recharts';
-import {Button} from "@mui/material"
+import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material"
 import axiosInstance from "../config/axiosConfig"
 import ChartComponent from "./Char";
-import { ShowChart } from "@mui/icons-material";
+import { Navigate } from "react-router-dom";
 
 function Budget() {
   // state for dropdown menus and picking which month expense chart to render / email
@@ -114,6 +113,11 @@ function Budget() {
 
   const handleChartsChange = (event) => {
     setSelectedChart(event.target.value);
+  }
+
+  let token = localStorage.getItem("token")
+  if (!token) {
+    return <Navigate to="/auth/login" state={{otherError: "Please login to view your budget."}} />;
   }
 
   return (

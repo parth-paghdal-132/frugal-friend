@@ -5,6 +5,8 @@ const cors = require("cors")
 const public = express.static(__dirname + "/public")
 const uploads = express.static(__dirname + "/uploads")
 const app = express()
+const client = require("./config/redis");
+client.connect().then(() => {});
 
 app.use("/public", public)
 app.use("/uploads", uploads)
@@ -27,7 +29,7 @@ app.use(
 )
 
 app.use("/auth", async(req, res, next) => {
-    if(req.session.user){
+    if(req.url !== '/logout' && req.session.user){
         let errors = {}
         errors.other = "You are already logged in."
         errors.code = 403
