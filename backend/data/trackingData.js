@@ -7,9 +7,9 @@ const helpers = require('../helpers/trackingValidation')
 
 
 const userData = require('./authData');
+const rewardData = require('./rewardData');
 
 const tracking = mongoCollections.tracking;
-
 
 
 const setGoal = async (userId, month, year, estimatedIncome, savingGoal) => {
@@ -84,6 +84,7 @@ const setGoal = async (userId, month, year, estimatedIncome, savingGoal) => {
         if (updatedInfo.modifiedCount !==1) {
             throw new Error("Could not updated new goal successfully");
         }
+        return {newGoal: false};
     } else {
         // Create a new goal
         const returnUser = await userData.getUser(userId);
@@ -103,10 +104,14 @@ const setGoal = async (userId, month, year, estimatedIncome, savingGoal) => {
         savingGoal: sanitizedSavingGoal
         });
 
+        // give user point for setting new goal
+        await rewardData.setReward(userId, 'goal', month);
+
         const insertInfo = await trackingCollection.insertOne(newGoal);
         if (!insertInfo.acknowledged) {
             throw new Error('Failed to create a new goal');
         }
+        return {newGoal: true};
     }
   };
 
@@ -159,6 +164,9 @@ const addExpense = async (userId, month, year, newExpense) => {
             $inc: { totalExpense: sanitizedAmount, leftToSpend: -1 * sanitizedAmount }
         };
 
+        // give user point for adding expense
+        await rewardData.setReward(userId, 'expense', month)
+
         const result = await trackingCollection.updateOne({ _id: existingBudget._id }, updateDoc);
         if (result.modifiedCount === 0) {
             throw new Error("Failed to add expense.");
@@ -198,10 +206,6 @@ async function updateIncome(userId, updatedMonth, year, updatedIncome, descripti
     // xss protection
     const sanitizedUpdatedIncome = Number(xss(updatedIncome));
     const sanitizedDescription = xss(description);
-    
-    
-  
-   
   
     // Connect to the tracking collection
     const trackingCollection = await tracking();
@@ -218,6 +222,8 @@ async function updateIncome(userId, updatedMonth, year, updatedIncome, descripti
         "You need to create a budget for this month before updating income."
       );
     }
+
+    await rewardData.setReward(userId, 'income', updatedMonth);
   
     // Update the income in the budget document
     const result = await trackingCollection.updateOne(

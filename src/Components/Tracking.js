@@ -329,14 +329,17 @@ const monthOptions = [
       
     } else {
       try {
-      const response = await axiosInstance.post("/api/set-goal", {
-        userId: sessionData._id,
-        month: selectedMonth,
-        estimatedIncome: estimatedIncome,
-        savingGoal: savingGoal,
-      });
-
-        alert("Set Goal Successfully")
+        const response = await axiosInstance.post("/api/set-goal", {
+          userId: sessionData._id,
+          month: selectedMonth,
+          estimatedIncome: estimatedIncome,
+          savingGoal: savingGoal,
+        });
+        if (response.data.newGoal) {
+          alert("Set New Goal Successfully, you have been awarded 7 points!")
+        } else {
+          alert("Set Goal Successfully")
+        }
         setEstimatedIncome(null);
         setSavingGoal(null);
         setSelectedMonth(null)
@@ -365,7 +368,7 @@ const monthOptions = [
             updatedMonth: incomeMonth,
             description: updatedIncomeDescription
           }); // update the charData   
-            alert("Update Income Successfully")
+            alert("Update Income Successfully, you have been awarded 2 points!")
             setUpdatedIncome(null);
             setIncomeMonth(null);
             setUpdatedIncomeDescription(null)
@@ -394,7 +397,7 @@ const monthOptions = [
           description: expenseDescription
         });
   
-          alert("Add Expense Successfully")
+          alert("Add Expense Successfully, you have been awarded 1 point!")
           setSelectedCategory(null);
           setExpenseAmount("");
           setExpenseDescription("");
