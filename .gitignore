@@ -3,7 +3,10 @@
 # dependencies
 /node_modules
 /backend/node_modules
-/backend/uploads
+/backend/uploads/images/*
+!/backend/uploads/images/*.js
+/backend/uploads/thumbs/*
+!/backend/uploads/thumbs/*.js
 /.pnp
 .pnp.js
 

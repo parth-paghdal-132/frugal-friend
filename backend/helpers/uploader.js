@@ -1,8 +1,11 @@
 const multer = require("multer")
 const { ObjectId} = require("mongodb")
 const fs = require("fs")
-const gm = require('gm').subClass({ imageMagick: '7+' });
+const ck = require("ckey")
+const gm = require('gm').subClass({ imageMagick: ck.IMAGEMAGICK === "true" ? true : "7+" });
 
+
+console.log(typeof ck.IMAGEMAGICK)
 const ALLOWED_IMAGE_FILE_SIZE = 15728640
 const ALLOWED_IMAGE_TYPE = ["image/jpeg", "image/jpg", "image/png"]
 
@@ -54,6 +57,8 @@ function makeThumb(filePath, fileName) {
         gm(`${filePath}/${fileName}`)
             .resize(150,150)
             .write(`./uploads/thumbs/${fileName}`, (err) => {
+                console.log("thumb error")
+                console.log(err)
                 if(err){
                     resolve(null)
                 } else {
