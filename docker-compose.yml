@@ -14,17 +14,17 @@ services:
         image: redislabs/redismod
         ports:
             - "6379:6379"
-    # frontend:
-    #     build: /
-    #     container_name: frontend_container
-    #     ports:
-    #         - "3000:3000"
-    #     stdin_open: true
-    #     volumes:
-    #         - .:/app/frontend
-    #         - /app/node_modules
-    #     depends_on:
-    #         - backend
+    frontend:
+        build: /
+        container_name: frontend_container
+        ports:
+            - "3000:3000"
+        stdin_open: true
+        volumes:
+            - .:/app/frontend
+            - /app/node_modules
+        depends_on:
+            - backend
     backend:
         build: /backend
         container_name: backend_container
