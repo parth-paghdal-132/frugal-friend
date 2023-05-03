@@ -29,7 +29,12 @@ router.post('/email/monthly', jsonParser, urlEncoder, async (req, res) => {
     return res.status(400).json({error: 'chartUrl needs to be supplied'})
   }
 
-  await mailer.sendEmail(req.session.user.email, req.body.month, req.body.expense, req.body.chartUrl);
-})
+  try {
+    await mailer.sendEmail(req.session.user.email, req.body.month, req.body.expense, req.body.chartUrl);
+    return res.status(201).json({created: true});
+  } catch (e) {
+    return res.status(500).json({create: false});
+  }
+});
 
 module.exports = router;
