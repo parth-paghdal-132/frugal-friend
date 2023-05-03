@@ -1,0 +1,22 @@
+.table {
+    width: 50vw;
+    margin: 0 auto;
+}
+
+td {
+    padding: 10px;
+}
+
+th {
+    padding: 10px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
