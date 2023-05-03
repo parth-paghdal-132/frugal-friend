@@ -3,6 +3,7 @@ import { Button } from "@mui/material"
 import axiosInstance from "../config/axiosConfig"
 import ChartComponent from "./Char";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
 
 function Budget() {
   // state for dropdown menus and picking which month expense chart to render / email
@@ -12,23 +13,9 @@ function Budget() {
   // state for images of the chart for emailing user (yearly)
   const [monthExpensesIMG, setMonthExpensesIMG] = useState(null);
 
-  //maybe do use effect on once monthExpensesImg is set? -> then do axios call
-
-  const [monthlySavingIMG, setMonthlySavingIMG] = useState(null);
-  const [monthlyIncomeIMG, setMonthlyIncomeIMG] = useState(null);
 
   // state for telling ChartComponent to generate image
   const [getImageClicked, setGetImageClicked] = useState(false);
-
-  function handleMonthlySavingIMG(data) {
-    setMonthlySavingIMG(data);
-    setGetImageClicked(false);
-  }
-
-  function handleMonthlyIncomeIMG(data) {
-    setMonthlyIncomeIMG(data);
-    setGetImageClicked(false);
-  }
 
   function handleMonthExpensesIMG(data) {
     setMonthExpensesIMG(data);
@@ -83,6 +70,23 @@ function Budget() {
 
     fetchExpenses();
   }, [showMonth])
+
+  useEffect(() => {
+    async function fetchSummary() {
+      try {
+        const response = await axiosInstance.get("/api/session");
+        const summaryData = await axiosInstance.post("/api/summary-data", {
+          userId: response.data._id
+        });
+        setSummaryData(summaryData.data);
+      } catch (e) {
+        console.log(e)
+      }
+      
+    }
+
+    fetchSummary()
+  }, [])
 
   useEffect(() => {
     async function createEmail() {
@@ -193,11 +197,11 @@ function Budget() {
 
       <h1 style={{textAlign: 'center'}}>Yearly Summaries</h1>
       <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <ChartComponent onChildData={handleMonthlySavingIMG} getImage={getImageClicked} chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
-        <ChartComponent onChildData={handleMonthlyIncomeIMG} getImage={getImageClicked} chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
+        <ChartComponent chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
+        <ChartComponent chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
       </div>
       <div>
-        <ChartComponent onChildData={handleMonthlyIncomeIMG} getImage={getImageClicked} chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
+        <ChartComponent chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
       </div>
       <div style={{marginBottom: 100}}/>
     </div>
