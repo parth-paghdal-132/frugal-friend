@@ -187,10 +187,7 @@ const monthOptions = [
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await axiosInstance.post("/api/budget-data", {
-          userId: sessionData._id,
-          month: showMonth
-        });
+        const response = await axiosInstance.post(`/api/budget-data?month=${showMonth}`);
         setCharData(response.data);
       } catch (error) {
         console.log(error);
