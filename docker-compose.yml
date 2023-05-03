@@ -39,7 +39,7 @@ services:
             - MONGO_URL=mongodb://mongo_db:27017
             - IMAGEMAGICK=true
             - REDIS_URL=redis://redis:6379
-        # command: bash -c "npm run seed && npm start"
+        command: bash -c "npm run seed && npm start"
 volumes:
     mongo_db_data:
     

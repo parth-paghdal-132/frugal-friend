@@ -141,9 +141,6 @@ function UsersProfile() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={6} sx={{pl:5, pr:5}}>
-                <Typography variant="h6">User point earned will go here</Typography>
-            </Grid>
         </Grid>
     )
 }
