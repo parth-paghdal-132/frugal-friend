@@ -9,10 +9,10 @@ function Budget() {
   // state for dropdown menus and picking which month expense chart to render / email
   const [showMonth, setShowMonth] = useState(new Date().toLocaleString('default', {month: 'long'}));
   const [selectedChart, setSelectedChart] = useState('BarChart');
+  const [isLoading, setIsLoading] = useState(true);
 
   // state for images of the chart for emailing user (yearly)
   const [monthExpensesIMG, setMonthExpensesIMG] = useState(null);
-
 
   // state for telling ChartComponent to generate image
   const [getImageClicked, setGetImageClicked] = useState(false);
@@ -22,19 +22,24 @@ function Budget() {
     setGetImageClicked(false);
   }
 
-  const monthlyExpenses = [
-    { month: 'January', amount: 100 },
-    { month: 'February', amount: 200 },
-    { month: 'March', amount: 150 },
-    { month: 'April', amount: 300 },
-  ];
-
-  // this needs to be populated otherwise
-  const [monthlyExpense, setMonthlyExpense] = useState(monthlyExpenses);
-  const [monthlyIncome, setMonthlyIncome] = useState(monthlyExpenses);
   const [charData, setCharData] = useState([]);
   const [emailData, setEmailData] = useState([]);
-  const [monthlySaving, setMonthlySaving] = useState(monthlyExpenses);
+  const [summaryData, setSummaryData] = useState(null);
+
+  const monthOptions = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   useEffect(() => {
     async function fetchExpenses() {
@@ -73,12 +78,14 @@ function Budget() {
 
   useEffect(() => {
     async function fetchSummary() {
+      console.log('fetching summary data');
       try {
         const response = await axiosInstance.get("/api/session");
         const summaryData = await axiosInstance.post("/api/summary-data", {
           userId: response.data._id
         });
         setSummaryData(summaryData.data);
+        setIsLoading(false);
       } catch (e) {
         console.log(e)
       }
@@ -87,6 +94,55 @@ function Budget() {
 
     fetchSummary()
   }, [])
+
+  const parseSummaryData = (data, type) => {
+    if (type === "Monthly Expense") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.totalExpense 
+        }
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+    if (type === "Monthly Income") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.income[perMonth.income.length - 1].amount}
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+    if (type === "Monthly Saving") {
+      return data.map((perMonth) => {
+        if (isNaN(perMonth)) {
+          return {
+          month: monthOptions[perMonth.info.month - 1],
+          amount: perMonth.leftToSpend + perMonth.savingGoal}
+        } else {
+          return  {
+          month: monthOptions[perMonth - 1],
+          amount: 0
+          }
+        }
+        
+      })
+    }
+  }
 
   useEffect(() => {
     async function createEmail() {
@@ -97,7 +153,7 @@ function Budget() {
           month: showMonth
         }
         setMonthExpensesIMG(undefined);
-        const data = await axiosInstance.post('/budget/email/monthly', emailBody);
+        await axiosInstance.post('/budget/email/monthly', emailBody);
       } catch (e) {
         console.log(e);
       }
@@ -196,14 +252,20 @@ function Budget() {
 
 
       <h1 style={{textAlign: 'center'}}>Yearly Summaries</h1>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <ChartComponent chartType="BarChart" chartData={monthlySaving} title="Monthly Saving" />
-        <ChartComponent chartType="BarChart" chartData={monthlyIncome} title="Monthly Income" />
+      {isLoading ? (
+        <div> Loading... </div>
+      ) : (
+        <div>
+          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Saving")} title="Monthly Saving" />
+            <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Income")} title="Monthly Income" />
+          </div>
+          <div>
+            <ChartComponent chartType="line" chartData={parseSummaryData(summaryData, "Monthly Expense")} title="Monthly Expenses" />
+          </div>
+          <div style={{marginBottom: 100}}/>
       </div>
-      <div>
-        <ChartComponent chartType="line" chartData={monthlyExpense} title="Monthly Expenses" />
-      </div>
-      <div style={{marginBottom: 100}}/>
+      )}
     </div>
   )
 }
