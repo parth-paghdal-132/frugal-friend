@@ -3,13 +3,14 @@ import { Button } from "@mui/material"
 import axiosInstance from "../config/axiosConfig"
 import ChartComponent from "./Char";
 import { Navigate } from "react-router-dom";
-import axios from "axios";
 
 function Budget() {
   // state for dropdown menus and picking which month expense chart to render / email
   const [showMonth, setShowMonth] = useState(new Date().toLocaleString('default', {month: 'long'}));
   const [selectedChart, setSelectedChart] = useState('BarChart');
   const [isLoading, setIsLoading] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSent, setIsSent] = useState(false);
 
   // state for images of the chart for emailing user (yearly)
   const [monthExpensesIMG, setMonthExpensesIMG] = useState(null);
@@ -144,6 +145,30 @@ function Budget() {
     }
   }
 
+  React.useEffect(() => {
+    let timer;
+    if (isSuccess) {
+      timer = setTimeout(() => {
+        setIsSuccess(false);
+      }, 2500);
+    }
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [isSuccess]);
+
+  React.useEffect(() => {
+    let timer;
+    if (isSent) {
+      timer = setTimeout(() => {
+        setIsSent(false);
+      }, 2500);
+    }
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [isSent]);
+
   useEffect(() => {
     async function createEmail() {
       try {
@@ -153,7 +178,11 @@ function Budget() {
           month: showMonth
         }
         setMonthExpensesIMG(undefined);
-        await axiosInstance.post('/budget/email/monthly', emailBody);
+        setIsSent(true);
+        const {data} = await axiosInstance.post('/budget/email/monthly', emailBody);
+        if (data.created && data.created === true) {
+          setIsSuccess(true);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -229,10 +258,20 @@ function Budget() {
 
       {charData.length !== 0 ? (
         <div>
+          <div>
+            {isSuccess &&
+              <h3 style={{color: 'green', textAlign: 'center'}}>Successfully sent email</h3>
+            }
+            {(isSent && !isSuccess) && 
+              <h3 style={{textAlign: 'center'}}>Sending email...</h3>
+            }
+          </div>
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <Button variant="contained" onClick={handleMonthEmail}>
-              Receive Email about selected month's expenses
-            </Button>
+            {!isLoading &&
+              <Button variant="contained" onClick={handleMonthEmail}>
+                Receive Email about selected month's expenses
+              </Button>
+            }
           </div>
 
           <div style={{display: 'flex', justifyContent: 'center'}}>
