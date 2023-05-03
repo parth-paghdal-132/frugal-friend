@@ -201,7 +201,7 @@ const Navbar = () => {
 					</MenuItem>
 					<MenuItem onClick={handleCloseNavMenu}>
 						<Link
-						to="/transation"
+						to="/Tracking"
 						style={{ textDecoration: "none", color: "inherit" }}
 						>
 						<Typography textAlign="center">Add Transaction</Typography>
@@ -257,7 +257,7 @@ const Navbar = () => {
 				</Button>
 				<Button sx={{ my: 2, color: "white", display: "block" }}>
 					<NavLink
-						to="/transaction"
+						to="/Tracking"
 						style={{
 						textDecoration: "none",
 						color: "inherit",

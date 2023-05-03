@@ -57,8 +57,6 @@ function makeThumb(filePath, fileName) {
         gm(`${filePath}/${fileName}`)
             .resize(150,150)
             .write(`./uploads/thumbs/${fileName}`, (err) => {
-                console.log("thumb error")
-                console.log(err)
                 if(err){
                     resolve(null)
                 } else {

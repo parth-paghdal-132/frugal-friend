@@ -6,7 +6,6 @@ const mailerRoutes = require("./mailerRoutes");
 const rewardRoutes = require("./rewardRoutes");
 
 const configRoutes = (app) => {
-  console.log("here we are")
   app.use("/auth", authRoutes);
   app.use("/myprofile", myProfileRoutes);
   app.use("/user-profile", userProfileRoutes);

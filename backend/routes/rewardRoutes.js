@@ -5,7 +5,6 @@ const rewardData = data.rewardData;
 const router = express.Router();
 
 router.get('/mostPoints', async (req, res) => {
-  console.log('here')
   let scores = await rewardData.getMostPoints();
   res.json(scores);
 });

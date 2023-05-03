@@ -252,6 +252,7 @@ function MyProfile() {
             setApiCallState({...apiCallState, loading: false})
             if(response && response.data) {
                 setSuccessMessage("Information updated successfully.")
+                setUserToLocalStorage(response.data)
                 fillData(response.data)
                 showErrorData({})
             } else {
@@ -411,6 +412,12 @@ function MyProfile() {
 		localStorage.removeItem("user")
         window.dispatchEvent(new Event("storage"))
 	}
+
+    function setUserToLocalStorage(user) {
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
+        window.dispatchEvent(new Event("storage"))
+    }
 
     let token = localStorage.getItem("token")
     if(!token) {

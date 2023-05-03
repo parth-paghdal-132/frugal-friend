@@ -15,7 +15,7 @@ services:
         ports:
             - "6379:6379"
     frontend:
-        build: /
+        build: ./
         container_name: frontend_container
         ports:
             - "3000:3000"
