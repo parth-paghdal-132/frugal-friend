@@ -10,8 +10,14 @@ import {
   Paper,
   Typography,
   Avatar,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Box,
 } from "@mui/material";
 import "../Home.css";
+import axiosInstance from "../config/axiosConfig";
 
 function createData(rank, username, points) {
   return { rank, username, points };
@@ -57,6 +63,8 @@ export default function Home() {
   let token = localStorage.getItem("token");
   const [rows, setRows] = useState([]);
   const [user, setUser] = useState([]);
+  const [budgetData, setBudgetData] = useState([]);
+  const [summaryData, setSummaryData] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -64,7 +72,9 @@ export default function Home() {
       setRows(rows);
     }
     fetchData();
+
     setUser(JSON.parse(localStorage.getItem("user")));
+    console.log(user);
   }, []);
 
   if (token) {
@@ -73,17 +83,27 @@ export default function Home() {
         <br />
         <br />
         <div className="user">
-          <Avatar
-            alt="user profile picture"
-            src={getUserProfilePicture(user)}
-            sx={{ width: 50, height: 50 }}
-          />
-          <Typography variant="h4"> Hello, {user.username}!</Typography>
+          <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Avatar
+                alt="user profile picture"
+                src={getUserProfilePicture(user)}
+                sx={{ width: 50, height: 50 }}
+              />
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Hello, {user.username}!
+              </Typography>
+              <Typography variant="body2">
+                well meaning and kindly.
+                <br />
+                {'"a benevolent smile"'}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small">Learn More</Button>
+            </CardActions>
+          </Card>
         </div>
-        <br />
-        <Typography variant="h4" style={{ textAlign: "center" }}>
-          Your points:
-        </Typography>
         <br />
         <br />
         <div className="table">
