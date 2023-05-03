@@ -19,27 +19,27 @@ services:
         container_name: frontend_container
         ports:
             - "3000:3000"
-        stdin_open: true
         volumes:
             - .:/app/frontend
-            - /app/node_modules
+            - /app/frontend/node_modules
         depends_on:
             - backend
     backend:
-        build: /backend
+        build: ./backend
         container_name: backend_container
         ports:
             - "4000:4000"
         volumes:
             - ./backend:/app/backend
-            - /app/node_modules
+            - /app/backend/node_modules
         depends_on:
             - mongo_db
+            - redis
         environment:
             - MONGO_URL=mongodb://mongo_db:27017
             - IMAGEMAGICK=true
             - REDIS_URL=redis://redis:6379
-        command: bash -c "npm run seed && npm start"
+        # command: bash -c "npm run seed && npm start"
 volumes:
     mongo_db_data:
     
