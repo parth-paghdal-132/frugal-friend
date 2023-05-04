@@ -60,24 +60,42 @@ function getUserProfilePicture(user) {
 }
 
 export default function Home() {
-  let token = localStorage.getItem("token");
   const [rows, setRows] = useState([]);
   const [user, setUser] = useState([]);
-  const [budgetData, setBudgetData] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [savingGoal, setSavingGoal] = useState(0);
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       const rows = await mostPoints();
       setRows(rows);
-    }
-    fetchData();
+      setUser(JSON.parse(localStorage.getItem("user")));
 
-    setUser(JSON.parse(localStorage.getItem("user")));
-    console.log(user);
+      const response = await axiosInstance.get("/api/session");
+
+      const summaryDataRes = await axiosInstance.post("/api/summary-data", {
+        userId: response.data._id,
+      });
+
+      setSummaryData(summaryDataRes.data[currentMonth + 1]);
+      setTotalExpense(summaryDataRes.data[currentMonth + 1]);
+      setTotalIncome(summaryDataRes.data[currentMonth + 1]);
+
+      setIsLoading(false);
+    }
+
+    fetchData();
   }, []);
 
-  if (token) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/auth/login" />;
+  } else if (token && !isLoading) {
     return (
       <div>
         <br />
@@ -91,16 +109,27 @@ export default function Home() {
                 sx={{ width: 50, height: 50 }}
               />
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Hello, {user.username}!
+                Hello, {user.username}! <br />
+                Today is {new Date().toLocaleDateString()}
               </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
+              <div hidden={!summaryData}>
+                <Typography variant="body2">
+                  You have {summaryData} expenses this month.
+                </Typography>
+              </div>
+              <div hidden={summaryData}>
+                <Typography variant="body2">
+                  You have no expenses this month.
+                </Typography>
+              </div>
             </CardContent>
             <CardActions>
-              <Button size="small">Learn More</Button>
+              <Button
+                size="small"
+                onClick={() => {
+                  window.location.href = "/myProfile";
+                }}
+              ></Button>
             </CardActions>
           </Card>
         </div>
@@ -150,6 +179,6 @@ export default function Home() {
       </div>
     );
   } else {
-    return <Navigate to="/auth/login" />;
+    return <div>Loading...</div>;
   }
 }
