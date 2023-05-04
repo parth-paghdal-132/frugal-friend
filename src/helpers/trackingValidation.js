@@ -1,5 +1,21 @@
 // const { ObjectId } = require("mongodb")
 
+const checkIsEmptyChartData = (data) => {
+    if (!data) {
+        return true;
+    }
+    if (Array.isArray(data)) {
+        let total = 0;
+        for (var i = 0; i < data.length; i++) {
+            total += data[i].amount;
+        }
+        if (total === 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const checkIsValidMonth = (month) => {
     const monthNames = [
       "january",
@@ -53,5 +69,6 @@ module.exports = {
     checkIsValidMonth,
     checkIsProperString,
     checkIsValidObjectId,
-    checkIsValidCategory
+    checkIsValidCategory,
+    checkIsEmptyChartData
 }

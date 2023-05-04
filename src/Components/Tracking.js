@@ -218,6 +218,14 @@ const monthOptions = [
         alert("Please enter a positive number for estimated income.");
         return;
     }
+
+    // Limit input to two decimal places
+    const inputArr = input.split('.');
+    if (inputArr[1] && inputArr[1].length > 2) {
+        alert("Please enter a number with no more than two decimal places.");
+        return;
+    }
+
   
     setEstimatedIncome(event.target.value);
   };
@@ -235,6 +243,12 @@ const monthOptions = [
     if (Number(input) < 0) {
         // If input is negative, update state with empty string and return
         alert("Please enter a positive number for estimated expense.");
+        return;
+    }
+    // Limit input to two decimal places
+    const inputArr = input.split('.');
+    if (inputArr[1] && inputArr[1].length > 2) {
+        alert("Please enter a number with no more than two decimal places.");
         return;
     }
     setExpenseAmount(event.target.value);
@@ -293,6 +307,12 @@ const monthOptions = [
         alert("Please enter a positive number for updated income.");
         return;
     }
+    // Limit input to two decimal places
+    const inputArr = input.split('.');
+    if (inputArr[1] && inputArr[1].length > 2) {
+        alert("Please enter a number with no more than two decimal places.");
+        return;
+    }
     setUpdatedIncome(event.target.value);
   }
 
@@ -308,6 +328,12 @@ const monthOptions = [
     if (Number(input) < 0) {
         // If input is negative, update state with empty string and return
         alert("Please enter a positive number for saving goal.");
+        return;
+    }
+    // Limit input to two decimal places
+    const inputArr = input.split('.');
+    if (inputArr[1] && inputArr[1].length > 2) {
+        alert("Please enter a number with no more than two decimal places.");
         return;
     }
     setSavingGoal(event.target.value);
@@ -344,14 +370,15 @@ const monthOptions = [
         console.error(error);
       }
 
-      setEstimatedIncome(0);
-      setSavingGoal(0);
+      setEstimatedIncome("");
+      setSavingGoal("");
     }
     
 
   };
 
-  const handleUpdateClick = async() => {
+  const handleUpdateClick = async(event) => {
+      event.preventDefault();
       if (helpers.checkIsValidMonth(incomeMonth) > new Date().getMonth() + 1) {
         return alert("You can only update income for current or past month ")
       }
@@ -365,12 +392,17 @@ const monthOptions = [
             updatedMonth: incomeMonth,
             description: updatedIncomeDescription
           }); // update the charData   
+          console.log(`response = ${response.data}`)
+          if (response.data == "You need to create a budget for this month before updating income.") {
+              return alert("You need to create a budget(saving goal) for this month before updating income.")
+            }
             alert("Update Income Successfully, you have been awarded 2 points!")
             setUpdatedIncome(null);
             setIncomeMonth(null);
             setUpdatedIncomeDescription(null)
+            
         } catch (error) {
-            console.error(error);
+            console.log(error);
           }
 
          
@@ -427,194 +459,56 @@ const monthOptions = [
   if (token) {
     if (isLoading) {
     return <h1>Loading</h1>
-   }
+   } else {
     return (
     
   
-    <div className="container">
-     
-      {budgetData ? <div className="info-bar">
-        <h2>{now.toLocaleString('default', { month: 'long' })} {now.getDate()} </h2>
-        <h2>Estimated Income: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.income[budgetData.income.length - 1].amount : "$3000"}</h2>
-        <h2>Saving Goal: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.savingGoal : "$3000"}</h2>
-        <h2>{budgetData.leftToSpend}$ left to spend</h2>
-      </div> : (
-        <h2>You haven't set goal for this month. Let's set it below!</h2>
-      )}
-      
-      <div className="trackingForm-container">
-      <div className="set-goal">
-      <Tooltip title="You can set your goal for current or next month in this year">
-      <IconButton>
-      <HelpIcon />
-      </IconButton>
-      </Tooltip>
-        <form >
-        <Typography variant="h5" component="h1" align="center">
-        Set Your Goal
-        </Typography>
-        <TextField
-          fullWidth
-          required
-          label="Estimated Income"
-          value={estimatedIncome}
-          onChange={handleIncomeChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          required
-          label="Saving Goal"
-          value={savingGoal}
-          onChange={handleSavingGoalChange}
-          margin="normal"
-        />
-        <InputLabel id="month-select-label">Month</InputLabel>
-        <Select
-          labelId="month-select-label"
-          id="month-select"
-          value={selectedMonth}
-          label="Month"
-          onChange={handleMonthChange}
-        >
-          {monthOptions.map((month) => (
-            <MenuItem key={month} value={month}>
-              {month}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-          onClick={handleSetClick}
-        >
-        Set
-        </Button>
-        </form>
-      </div>
-    
-      <div className="add-expense">
-        <form >
-        <Tooltip title="Add expense for current month">
+      <div className="container">
+       
+        {budgetData ? <div className="info-bar">
+          <h2>{now.toLocaleString('default', { month: 'long' })} {now.getDate()} </h2>
+          <h2>Estimated Income: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.income[budgetData.income.length - 1].amount : "$3000"}</h2>
+          <h2>Saving Goal: {budgetData && budgetData.income[budgetData.income.length - 1].amount ? budgetData.savingGoal : "$3000"}</h2>
+          <h2>{budgetData.leftToSpend}$ left to spend</h2>
+        </div> : (
+          <h2>You haven't set goal for this month. Let's set it below!</h2>
+        )}
+        
+        <div className="trackingForm-container">
+        <div className="set-goal">
+        <Tooltip title="You can set your goal for current or next month in this year. 
+        You are allowed to reset goal for current or future month. But you cannot reset goal or try to update estimated income for past month here.">
         <IconButton>
         <HelpIcon />
         </IconButton>
         </Tooltip>
-        <Typography variant="h5" component="h1" align="center">
-        Add Expenses
-        </Typography>
-        <TextField
-          fullWidth
-          required
-          label="Expense amount"
-          value={expenseAmount}
-          onChange={handleExpenseChange}
-          margin="normal"
-        />
-        <InputLabel id="category-select-label">Category</InputLabel>
-        <Select
-          labelId="category-select-label"
-          id="category-select-label"
-          value={selectedCategory}
-          label="Category"
-          onChange={handleCategoryChange}
-        >
-          {categoryOptions.map((category) => (
-            <MenuItem key={category} value={category}>
-              {category}
-            </MenuItem>
-          ))}
-        </Select>
-        <TextField
-          fullWidth
-          required
-          label="Expense Description"
-          value={expenseDescription}
-          onChange={handleExpenseDescriptionChange}
-          margin="normal"
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-          onClick={handleAddClick}
-        >
-        Add
-        </Button>
-        </form>
-      </div> 
-
-
-      <div className="update-income">
-        <form >
-        <Tooltip title="If you find your actual income is lower or higher that your estimated income after that month, you can update it here.">
-        <IconButton>
-        <HelpIcon />
-        </IconButton>
-        </Tooltip>
-        <Typography variant="h5" component="h1" align="center">
-        Update Income
-        </Typography>
-        <TextField
-          fullWidth
-          required
-          label="Updated Income"
-          value={updatedIncome}
-          onChange={handleUpdateIncome}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          required
-          label="Expense Description"
-          value={updatedIncomeDescription}
-          onChange={handleIncomeDescriptionChange}
-          margin="normal"
-        />
-        <InputLabel id="incomeMonth-select-label">Month</InputLabel>
-        <Select
-          labelId="incomeMonth-select-label"
-          id="incomeMonth-select"
-          value={incomeMonth}
-          label="Month"
-          onChange={handleIncomeMonthChange}
-        >
-          {monthOptions.map((month) => (
-            <MenuItem key={month} value={month}>
-              {month}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-          onClick={handleUpdateClick}
-        >
-        Update
-        </Button>
-        </form>
-      </div>
-      </div>
-
-
-      <div className="chart-container">
-        <div className="expense-chart">
-          <h2> Visualization of your Expense </h2>
-          <InputLabel id="chartMonth-select-label">Month</InputLabel>
+          <form >
+          <Typography variant="h5" component="h1" align="center">
+          Set Your Goal
+          </Typography>
+          <TextField
+            fullWidth
+            required
+            label="Estimated Income"
+            value={estimatedIncome}
+            onChange={handleIncomeChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            required
+            label="Saving Goal"
+            value={savingGoal}
+            onChange={handleSavingGoalChange}
+            margin="normal"
+          />
+          <InputLabel id="month-select-label">Month</InputLabel>
           <Select
-            labelId="chartMonth-select-label"
-            id="chartMonth-select"
-            value={showMonth}
+            labelId="month-select-label"
+            id="month-select"
+            value={selectedMonth}
             label="Month"
-            onChange={handleShowMonthChange}
+            onChange={handleMonthChange}
           >
             {monthOptions.map((month) => (
               <MenuItem key={month} value={month}>
@@ -622,37 +516,180 @@ const monthOptions = [
               </MenuItem>
             ))}
           </Select>
-          <InputLabel id="chartType-selection">Select Chart Type</InputLabel>
-          <Select
-            labelId="chartType-selection"
-            id="chartType-selection"
-            value={selectedChart}
-            label="Select Charts Type"
-            onChange={handleSelectedChart}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+            onClick={handleSetClick}
           >
-            {chartTypeOptions.map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
+          Set
+          </Button>
+          </form>
+        </div>
+      
+        <div className="add-expense">
+          <form >
+          <Tooltip title="Add expense for current month">
+          <IconButton>
+          <HelpIcon />
+          </IconButton>
+          </Tooltip>
+          <Typography variant="h5" component="h1" align="center">
+          Add Expenses
+          </Typography>
+          <TextField
+            fullWidth
+            required
+            label="Expense amount"
+            value={expenseAmount}
+            onChange={handleExpenseChange}
+            margin="normal"
+          />
+          <InputLabel id="category-select-label">Category</InputLabel>
+          <Select
+            labelId="category-select-label"
+            id="category-select-label"
+            value={selectedCategory}
+            label="Category"
+            onChange={handleCategoryChange}
+          >
+            {categoryOptions.map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
               </MenuItem>
             ))}
           </Select>
-          {charData && <ChartComponent chartType={selectedChart} chartData={parseChartData(charData)} title={showMonth}/>}
+          <TextField
+            fullWidth
+            required
+            label="Expense Description"
+            value={expenseDescription}
+            onChange={handleExpenseDescriptionChange}
+            margin="normal"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+            onClick={handleAddClick}
+          >
+          Add
+          </Button>
+          </form>
+        </div> 
+  
+  
+        <div className="update-income">
+          <form >
+          <Tooltip title="If you find your actual income is lower or higher that your estimated income after that month, you can update it here.
+          You can not update income if you didn't set goal for that month.
+          You can not update income for future month even you have set goal for that month.">
+          <IconButton>
+          <HelpIcon />
+          </IconButton>
+          </Tooltip>
+          <Typography variant="h5" component="h1" align="center">
+          Update Income
+          </Typography>
+          <TextField
+            fullWidth
+            required
+            label="Updated Income"
+            value={updatedIncome}
+            onChange={handleUpdateIncome}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            required
+            label="Expense Description"
+            value={updatedIncomeDescription}
+            onChange={handleIncomeDescriptionChange}
+            margin="normal"
+          />
+          <InputLabel id="incomeMonth-select-label">Month</InputLabel>
+          <Select
+            labelId="incomeMonth-select-label"
+            id="incomeMonth-select"
+            value={incomeMonth}
+            label="Month"
+            onChange={handleIncomeMonthChange}
+          >
+            {monthOptions.map((month) => (
+              <MenuItem key={month} value={month}>
+                {month}
+              </MenuItem>
+            ))}
+          </Select>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+            onClick={handleUpdateClick}
+          >
+          Update
+          </Button>
+          </form>
         </div>
-        
-        <div className="saving-chart">
-          <h2>Saving Summary</h2>
-          <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Saving")} title="Monthly Saving" />
-          <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Income")} title="Monthly Income" />
-          <ChartComponent chartType="line" chartData={parseSummaryData(summaryData, "Monthly Expense")} title="Monthly Expense" />
         </div>
+  
+  
+        <div className="chart-container">
+          <div className="expense-chart">
+            <h2> Visualization of your Expense </h2>
+            <InputLabel id="chartMonth-select-label">Month</InputLabel>
+            <Select
+              labelId="chartMonth-select-label"
+              id="chartMonth-select"
+              value={showMonth}
+              label="Month"
+              onChange={handleShowMonthChange}
+            >
+              {monthOptions.map((month) => (
+                <MenuItem key={month} value={month}>
+                  {month}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel id="chartType-selection">Select Chart Type</InputLabel>
+            <Select
+              labelId="chartType-selection"
+              id="chartType-selection"
+              value={selectedChart}
+              label="Select Charts Type"
+              onChange={handleSelectedChart}
+            >
+              {chartTypeOptions.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+            {charData ? <ChartComponent chartType={selectedChart} chartData={parseChartData(charData)} title={showMonth}/> : <h3>No Data For This Month</h3>}
+          </div>
+          
+          <div className="saving-chart">
+            <h2>Saving Summary</h2>
+            <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Saving")} title="Monthly Saving" />
+            <ChartComponent chartType="BarChart" chartData={parseSummaryData(summaryData, "Monthly Income")} title="Monthly Income" />
+            <ChartComponent chartType="line" chartData={parseSummaryData(summaryData, "Monthly Expense")} title="Monthly Expense" />
+          </div>
+        </div>
+  
+  
+  
       </div>
-
-
-
-    </div>
-
-
-  );
+  
+  
+    );
+   }
+    
   } else {
 
     return (

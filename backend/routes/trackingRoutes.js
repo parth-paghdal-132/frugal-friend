@@ -213,6 +213,9 @@ router.post('/api/update-income', async (req, res) => {
     await trackingData.updateIncome(userId, updatedMonth, year, updatedIncome, description);
     return res.json({ message: 'Income updated successfully.' });
   } catch(e) {
+    if (e.message == "You need to create a budget for this month before updating income.") {
+      return res.json(e.message);
+    }
     return res.status(500).send('Server Error');
   }
   
