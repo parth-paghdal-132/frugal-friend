@@ -128,8 +128,7 @@ const addExpense = async (userId, month, year, newExpense) => {
     helpers.checkIsProperString(userId);
     helpers.checkIsValidObjectId(userId);
 
-    // check valid description
-    helpers.checkIsProperString(newExpense.description.trim());
+
   
     // Check if the value is a valid number
     if (!Number.isFinite(Number(newExpense.amount))) {

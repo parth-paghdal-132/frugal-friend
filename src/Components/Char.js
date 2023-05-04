@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { LineChart, Line, PieChart, Pie, Legend, Tooltip, ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Bar, Cell } from 'recharts';
 import { useCurrentPng } from 'recharts-to-png';
+import helpers from "../helpers/trackingValidation"
 
 function ChartComponent({chartType, chartData, title, onChildData, chartStyling, getImage}) {
   let chartJsx;
@@ -39,6 +40,10 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
       </div>
     );
   } else if (chartType === 'Pie') {
+    console.log(`charData for pie is ${chartData}`)
+    if (!chartData || helpers.checkIsEmptyChartData(chartData)) {
+      return <h3>No Data For This Month</h3>
+    }
     chartJsx = (
       <div style={{width: "100%"}}>
         <h2 className="chart-title">{title}'s Expenses</h2>
