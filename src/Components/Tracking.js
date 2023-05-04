@@ -693,9 +693,7 @@ const monthOptions = [
   } else {
 
     return (
-      <div>
-       <Link to="/auth/login" style={{ fontSize: '20px' }}>Login First! Go to login page</Link>
-      </div>
+      <Navigate to="/auth/login" state={{otherError: "Please login before access your tracking page."}}/>
     );
     
   }
