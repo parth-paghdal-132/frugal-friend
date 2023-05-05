@@ -451,6 +451,7 @@ function MyProfile() {
                             <Box 
                                 component="img" 
                                 src={image} 
+                                aria-label="user image"
                                 sx={{borderRadius:"50%", width:"192px", height:"192px"}}
                                 style={{background: "url(/preview.jpeg) no-repeat scroll 0 0"}}/>
                             <Box 

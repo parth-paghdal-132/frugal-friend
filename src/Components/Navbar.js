@@ -144,6 +144,7 @@ const Navbar = () => {
 				</Snackbar>
 				<Typography
 					variant="h6"
+					component="h1"
 					noWrap
 					sx={{
 					mr: 2,
@@ -220,6 +221,7 @@ const Navbar = () => {
 
 			<Typography
 				variant="h5"
+				component="h1"
 				noWrap
 				sx={{
 				mr: 2,

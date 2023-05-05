@@ -103,33 +103,38 @@ function UsersProfile() {
         </Grid>
     }
     return (
-        <Grid container sx={{mt:3, mb:5}}>
-            <Grid item xs={12} direction="column" alignItems="center" textAlign="center" sx={{mt:5, mb:5}}>
+        <Grid container sx={{mt:3, mb:5}} justifyItems="center" justifyContent="center" alignItems="center">
+            <Grid item xs={12} alignItems="center" textAlign="center" sx={{mt:5, mb:5}}>
                 <Typography variant="h4" component="h1">Profile information</Typography>
                 { otherError && <Alert severity="error" sx={{mt:3}}>{otherError}</Alert> }
             </Grid>
-            <Grid item xs={6} sx={{pl:5, pr:5}}>
+            <Grid item xs={6} sx={{pl:5, pr:5}} >
                 <Grid container direction="column" alignItems="center" sx={{mt:3}}>
                     <Box 
                         component="img" 
                         src={image} 
+                        aria-label="user image"
                         sx={{borderRadius:"50%", border:"1px solid #80808047", width:"192px", height:"192px", boxShadow:15,mb:1}}
                         style={{background: "url(/preview.jpeg) no-repeat scroll 0 0"}}/>
-                    <Typography variant="h5">{firstName} {lastName}</Typography>
+                    <Typography variant="h5" component="h2">{firstName} {lastName}</Typography>
                 </Grid>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Box style={boxStyle}>
-                            <Typography variant="subtitle1" component="p">{bio}</Typography>
-                        </Box>
-                        <Box style={boxStyle}>
-                            <Typography variant="subtitle1" component="p" sx={{color:"#0086f9"}}>@{username}</Typography>
-                        </Box>
+                        {bio && 
+                            <Box style={boxStyle}>
+                                <Typography variant="subtitle1" component="p">{bio}</Typography>
+                            </Box>
+                        }
+                        {username && 
+                            <Box style={boxStyle}>
+                                <Typography variant="subtitle1" component="p" sx={{color:"#0086f9"}}>@{username}</Typography>
+                            </Box>
+                        }
                     </Grid>
                 </Grid>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Typography variant="h6" sx={{mt:3}}>Connect with me</Typography>
+                        <Typography variant="h6" sx={{mt:3}} component="h3">Connect with me</Typography>
                         <Box style={boxStyle}>
                             <ul>
                                 <li><a href={`mailto:${email}`} target="_blank">{email}</a></li>

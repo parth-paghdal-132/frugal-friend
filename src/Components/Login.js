@@ -128,7 +128,7 @@ function Login(){
                 <form onSubmit={handleSubmit}>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h4">Login</Typography>
+                            <Typography variant="h4" component="h1">Login</Typography>
                             {otherError &&
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
                             }

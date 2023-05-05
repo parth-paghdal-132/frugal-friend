@@ -214,7 +214,7 @@ function Signup(){
                 <form onSubmit={handleSubmit}>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h4">Signup</Typography>
+                            <Typography variant="h4" component="h1">Signup</Typography>
                             {otherError &&
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
                             }
