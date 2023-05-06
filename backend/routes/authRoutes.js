@@ -173,7 +173,11 @@ router
 			req.session.destroy();
 			return res.status(200).json({ message: "You have been logged out." });
 		} else {
-			return res.status(403).json({ other: "You are already logged out." });
+			let errors = {}
+			errors.other = "You are already logged out."
+            errors.sessionExpired = true
+            errors.code = 403
+            return res.status(403).json(errors)
 		}
 });
 

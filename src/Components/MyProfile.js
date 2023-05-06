@@ -141,8 +141,12 @@ function MyProfile() {
         setApiCallState({...apiCallState, loading: false, data: data})
         setFirstName(data.firstName)
         setLastName(data.lastName)
-        setBio(data.bio)
-        setImage(`${IMAGE_PATH}${data.image}`)
+        setBio(data.bio ? data.bio : "")
+        if(data.image) {
+            setImage(`${IMAGE_PATH}${data.image}`)
+        } else {
+            setImage("/preview.jpeg")
+        }
         setEmail(data.email)
         setUsername(data.username)
         setFBLink(data.fbLink)
@@ -450,10 +454,9 @@ function MyProfile() {
                             }}>
                             <Box 
                                 component="img" 
-                                src={image} 
-                                aria-label="user image"
-                                sx={{borderRadius:"50%", width:"192px", height:"192px"}}
-                                style={{background: "url(/preview.jpeg) no-repeat scroll 0 0"}}/>
+                                src={image}
+                                alt="your profile picture"
+                                sx={{borderRadius:"50%", width:"192px", height:"192px"}}/>
                             <Box 
                                 sx={{
                                     background:"linear-gradient(0deg, rgba(0,0,0,.8), rgba(0,0,0,0) 85%)",
@@ -534,7 +537,6 @@ function MyProfile() {
                                 value={bio}
                                 onChange={handleBioChange}
                                 aria-describedby="bioInfo"
-                                rows={3}
                                 id="bio"
                                 name="bio"
                                 fullWidth={true}

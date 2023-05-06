@@ -2,7 +2,6 @@ import * as React from "react";
 import { Link, NavLink, Navigate, useNavigate } from "react-router-dom";
 import {
   AppBar,
-  Container,
   Toolbar,
   Box,
   Button,
@@ -14,6 +13,7 @@ import {
   Avatar,
   Snackbar,
   Alert,
+  Stack,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import axiosInstance from "../config/axiosConfig"
@@ -76,12 +76,8 @@ const Navbar = () => {
 			}
 		} catch(exception) {
 			setApiCallState(prev => ({...prev, loading: false, op: "logout"}))
-			if(exception.response && exception.response.data){
-				setApiCallState(prev => ({...prev, error: exception.response.data.other}))
-				setSnackbarState(true)
-            } else {
-				setSnackbarState(true)
-            }
+			removeUserFromLocalStorage()
+			navigate("/auth/login", { replace: false, state: {successMessage: "You have been logged out successfully."}}, 1)
 		}
 	}
 
@@ -289,22 +285,22 @@ const Navbar = () => {
 					open={Boolean(anchorElUser)}
 					onClose={handleCloseUserMenu}>
 						{token ? 
-							<div>
-								<MenuItem onClick={gotoMyProfile}>
+							<Stack component="li">
+								<MenuItem component="span" onClick={gotoMyProfile}>
 									View Profile
 								</MenuItem>
-								<MenuItem onClick={performLogout}>
+								<MenuItem component="span" onClick={performLogout}>
 									Logout
 								</MenuItem>		
-							</div>
-						: 	<div>
-								<MenuItem onClick={gotoSignUp}>
+							</Stack>
+						: 	<Stack component="li">
+								<MenuItem component="span" onClick={gotoSignUp}>
 									Sign Up
 								</MenuItem>
-								<MenuItem onClick={gotoLogin}>
+								<MenuItem component="span" onClick={gotoLogin}>
 									Login
 								</MenuItem>
-							</div>
+							</Stack>
 						}
 				</Menu>
 			</Box>

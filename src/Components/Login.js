@@ -148,7 +148,7 @@ function Login(){
                                     aria-describedby="emailInfo"
                                     id="email" 
                                     type="email" 
-                                    fullwidth="true"
+                                    fullwidth={true}
                                     startAdornment={
                                     <InputAdornment position="start">
                                         <Email></Email>
