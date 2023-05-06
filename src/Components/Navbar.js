@@ -246,47 +246,36 @@ const Navbar = () => {
 			</Typography>
 
 			<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-				<Button sx={{ my: 2, color: "white", display: "block" }}>
-					<NavLink
-						to="/"
-						style={{
-						textDecoration: "none",
-						color: "inherit",
-						}}
-					>
-						Home
-					</NavLink>
+				<Button 
+					sx={{ my: 2, color: "white", display: "block" }}
+					component={NavLink}
+					to="/"
+				>
+					Home
 				</Button>
-				<Button sx={{ my: 2, color: "white", display: "block" }}>
-					<NavLink
-						to="/Tracking"
-						style={{
-						textDecoration: "none",
-						color: "inherit",
-						}}
-					>
-						Add Transaction
-					</NavLink>
+				<Button 
+					sx={{ my: 2, color: "white", display: "block" }}
+					component={NavLink}
+					to="/Tracking"
+				>
+					Add Transaction
 				</Button>
-				<Button sx={{ my: 2, color: "white", display: "block" }}>
-					<NavLink
-						to="/budget"
-						style={{
-						textDecoration: "none",
-						color: "inherit",
-						}}>
-						View Budget
-					</NavLink>
+				<Button 
+					sx={{ my: 2, color: "white", display: "block" }}
+					component={NavLink}
+					to="/budget"
+				>
+					View Budget
 				</Button>
 			</Box>
 
 			<Box sx={{ flexGrow: 0 }}>
-				<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+				<IconButton component="div" onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 					<Avatar alt="Remy Sharp" src={getUserProfilePicture(user)} />
 				</IconButton>
 				<Menu
 					sx={{ mt: "45px" }}
-					id="menu-appbar"
+					id="menu-profile"
 					anchorEl={anchorElUser}
 					anchorOrigin={{
 						vertical: "top",

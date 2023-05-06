@@ -117,9 +117,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div className="App">
-          <header className="App-header">
-            <Navbar />
-          </header>
+          <Navbar />
         </div>
         <div>
           <Routes>
