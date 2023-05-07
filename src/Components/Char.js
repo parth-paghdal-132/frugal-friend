@@ -31,7 +31,7 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
         <LineChart ref={ref} data={chartData}>
           <XAxis dataKey="month"/>
           <YAxis />
-          <Line type="monotone" dataKey="amount" stroke="#8884d8" >
+          <Line type="monotone" dataKey="amount" stroke="#706bcc" >
           </Line>
           <Tooltip />
           <Legend />
@@ -74,7 +74,7 @@ function ChartComponent({chartType, chartData, title, onChildData, chartStyling,
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="amount" fill= {title === 'Monthly Saving' ? "#8884d8" : "#ff9900"}>
+            <Bar dataKey="amount" fill= {title === 'Monthly Saving' ? "#706bcc" : "#ac6600"}>
             </Bar>
             </BarChart>
             </div>
