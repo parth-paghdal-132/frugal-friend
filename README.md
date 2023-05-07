@@ -47,7 +47,7 @@ Here is the official documentation from the Docker to install it on your device 
 - Finish installation and run newly installed docker.
 
 ### How to install Imagemagick on my device?
-Here is the official documentation from the ImageMagick site to install it on your device https://imagemagick.org/script/download.php. Please follow this link and download imagemagick based on your PC OS.
+Here is the official documentation from the ImageMagick site to install it on your device https://imagemagick.org/script/download.php. Please follow this link and download imagemagick based on your PC OS and make sure you are downloading the lateset version of Imagemagick, which is 7.1.1.
 
 ### How to install MongoDB on my device?
 Here is the official documentation from the MongoDB site to install it on your device https://www.mongodb.com/try/download/community. Please follow this link and download MongoDB on your device.
