@@ -182,7 +182,7 @@ const monthOptions = [
     }
     fetchSessionData();
     
-  }, [selectedMonth, expenseAmount, setIncomeMonth, showMonth]);
+  }, [selectedMonth, expenseAmount, setIncomeMonth, showMonth, updatedIncome, savingGoal]);
 
   useEffect(() => {
     const fetchChartData = async () => {
@@ -379,11 +379,15 @@ const monthOptions = [
 
   const handleUpdateClick = async(event) => {
       event.preventDefault();
+      if (!incomeMonth) {
+        return alert("Please select a month")
+      }
       if (helpers.checkIsValidMonth(incomeMonth) > new Date().getMonth() + 1) {
         return alert("You can only update income for current or past month ")
       }
       if (!incomeMonth || !updatedIncomeDescription || !updatedIncome) {
         return alert("Pleas fill out all the fields");
+
       } else {
         try {
           const response = await axiosInstance.post("/api/update-income", {
@@ -396,10 +400,11 @@ const monthOptions = [
           if (response.data == "You need to create a budget for this month before updating income.") {
               return alert("You need to create a budget(saving goal) for this month before updating income.")
             }
-            alert("Update Income Successfully, you have been awarded 2 points!")
-            setUpdatedIncome(null);
-            setIncomeMonth(null);
-            setUpdatedIncomeDescription(null)
+            setUpdatedIncome("");
+            setIncomeMonth("");
+            setUpdatedIncomeDescription("")
+            
+            return alert("Update Income Successfully, you have been awarded 2 points!")
             
         } catch (error) {
             console.log(error);
@@ -563,7 +568,6 @@ const monthOptions = [
           </Select>
           <TextField
             fullWidth
-            required
             label="Expense Description"
             value={expenseDescription}
             onChange={handleExpenseDescriptionChange}
@@ -606,7 +610,7 @@ const monthOptions = [
           <TextField
             fullWidth
             required
-            label="Expense Description"
+            label="Update Description"
             value={updatedIncomeDescription}
             onChange={handleIncomeDescriptionChange}
             margin="normal"
