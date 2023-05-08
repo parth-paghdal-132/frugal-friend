@@ -226,7 +226,7 @@ const NumberPad = () => {
       dispatch(
         setSentence({
           er: true,
-          en: "You need to set goal for current month before add expense",
+          en: "Need to set goal for current month, Go To Transaction Page",
         })
       );
       // alert("You need set goal for current month before add expense");
