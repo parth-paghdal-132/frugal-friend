@@ -156,7 +156,7 @@ function Signup(){
             setApiCallState({...apiCallState, loading:false})
             if(response.status === 200) {
                 if(response.data.email) {
-                    localStorage.setItem("token", response.data.token)
+                    setUserToLocalStorage(response.data)
                     setApiCallState({...apiCallState, data: response.data})
                     navigate("/", { replace: true }, 1)
                 } else {
@@ -188,7 +188,13 @@ function Signup(){
         }
     }
 
-    let token = localStorage.getItem("token")
+    function setUserToLocalStorage(user) {
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
+        window.dispatchEvent(new Event("storage"))
+    }
+
+    const token = localStorage.getItem("token")
     if(token) {
         return <Navigate to="/"/>
     }
@@ -208,7 +214,7 @@ function Signup(){
                 <form onSubmit={handleSubmit}>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography variant="h4">Signup</Typography>
+                            <Typography variant="h4" component="h1">Signup</Typography>
                             {otherError &&
                                 <Alert severity="error" sx={{mt:3}}>{otherError}</Alert>
                             }

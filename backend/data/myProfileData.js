@@ -4,6 +4,7 @@ const authValidations = require("../helpers/authValidations")
 const xss = require("xss")
 const bcryptJS = require("bcryptjs")
 const authData = require("./authData")
+const rewardData = require('./rewardData');
 const { ObjectId } = require("mongodb")
 
 const users = mongoCollections.users
@@ -31,10 +32,26 @@ const updateProfile = async (image, thumb, firstName, lastName, bio, username, f
         }
     }
 
+    // update stored user in redis
+    let userToUpdate = {
+        username: username,
+        firstName: firstName,
+        lastName: lastName,
+    }
+
     if(isProfilePictureChanged){
+        userToUpdate.image = image
+    }
+
+    rewardData.updateUserInRedis(userFromDB, userToUpdate);
+
+    if(isProfilePictureChanged){
+        
+        
         userFromDB.image = image
         userFromDB.thumb = thumb
     }
+    
     userFromDB.firstName = firstName
     userFromDB.lastName = lastName
     userFromDB.bio = bio

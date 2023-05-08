@@ -1,70 +1,129 @@
-# Getting Started with Create React App
+# Frugal Friend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Due to the extended use of credit cards and online payments, it becomes harder to keep track of expenses and save money. People need an app where they can track their expenses and keep some amount aside for savings, but few find this an easy task. With this motive, our application provides a  simple and user-friendly interface that makes it easy to input your income and expenses throughout the month, set monthly budget goals, and see your budget progress change in real-time as the month progresses with custom-made charts.
 
-## Available Scripts
+This repository holds project code for CS-554 final project
+### Group Name: Hawk
+### Group member:
+1. Adam Anikiej
+2. Wei Guo
+3. Qing Mei
+4. Parth Paghdal
+5. Peixuan Wu
 
-In the project directory, you can run:
+This web app is written using 2 different Javascript framework and few other independent technology
+1. Node.js
+2. React
+3. Firebase Authentication
+4. Redis
+5. Docker
+6. ImageMagick
 
-### `npm start`
+## Which code is where?
+The root directory of our codebase has code for backend and frontend. Under the root directory, one can find code for frontend and nder the directory name backend, one can find code related to the backend only.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Prerequisite for this web application.
+In order to run this app successfully you need to install few software prior to running this app, and those softwares are
+- Redis
+- Docker
+- Imagemagick
+- MongoDB and of course
+- Node.js
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### How to install redis on my device?
+Here is the official documentation from the redis to install it on your device https://redis.io/docs/getting-started/installation/. Please follow this link and download it on your device.
 
-### `npm test`
+### How to install Docker on my device?
+Here is the official documentation from the Docker to install it on your device https://docs.docker.com/get-docker/. Please follow this link and download it on your device.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### For mac users
+- Download the .dmg file according to your PC configuration from this link https://docs.docker.com/desktop/install/mac-install/.
+- Double click on downloaded .dmg file and install that into your PC.
+- Finish installation and run newly installed docker.
 
-### `npm run build`
+#### For window users
+- Download the .exe file according to your PC configuration from this link https://docs.docker.com/desktop/install/windows-install/.
+- Double click on downloaded .exe file and install that into your PC.
+- Finish installation and run newly installed docker.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### How to install Imagemagick on my device?
+Here is the official documentation from the ImageMagick site to install it on your device https://imagemagick.org/script/download.php. Please follow this link and download imagemagick based on your PC OS and make sure you are downloading the lateset version of Imagemagick, which is 7.1.1.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How to install MongoDB on my device?
+Here is the official documentation from the MongoDB site to install it on your device https://www.mongodb.com/try/download/community. Please follow this link and download MongoDB on your device.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Once you hit above URL it will bring you to the download page of MongoDB.
+- Scroll down to the MongoDB Community edition and then open MongoDB community server.
+- By default it will select plateform and package based on your PC OS. but make sure you are downloading the correct installation file.
+- After successful download, install that downloaded package and finish setup.
 
-### `npm run eject`
+### How to install Node.js on my device?
+Here is the official documentation from the Node.js site to install it on your device https://nodejs.org/en/download. Please follow this link and download Node.js on your device.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Once you hit above URL it will bring you to the download page of Node.js
+- Make sure you have selected LTS(Long Term Support) version for Node.js and download installation file according to your PC OS.
+- After successful download, install that downloaded package and finish setup.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### How to run application?
+- Open the code in VS Code or choice of your text editor.
+- Now start redis server so our redis client in backend can interact with it.
+- Now open integrated terminal in VS code or open project in terminal/command prompt.
+- Now navigate to backend folder using `cd backend`
+- After chanding directory, hit `npm install` command to install all neccasary library to run the backend.
+- Once installation of library is done hit `npm run seed` command to add initial data to backend db.
+- Once seeding is done hit `npm start` command to start our backend server.
+- Now wait for few seconds until you not show message like "Your server is running at http://localhost:4000". Once you see this message it means our server is running now.
+- Now our backend is started successfully, its time to start frontend as well. To do so, please open integrated terminal in VS code or open project in terminal/command prompt.
+- Now hit `npm install` command to install all neccasary library to run the application.
+- It will take few minutes to download all library.
+- Once downloading of all library is done, hit `npm start` command to start frontend.
+- it will take few minutes to start frontend and you can see in browser window as well.
+- http://localhost:3000/ is the main page of app but you can login here http://localhost:3000/auth/login.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### How to run application using Docker?
+- To run application using Docker, you must start Docker application in your local machine
+- Once your docker is running, please open integraed terminal in VS code or open project in termianl/command propmpt.
+- After opening project, hit `docker system prune` command to clear all existing container for a fresh start.
+- Once you get the result of above command hit `docker-compose up` command to run application. At very first time it will take some time(around 5 minutes) in order to install images for the container.
+- Above command will do everything for you like installing all node dependancy, seeding database, starting backend server and frontend. One thing that it don't do is starting app in browser. So for that you have to manually call http://localhost:3000/ in browser when docker container is running. You will see message like normal run.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Credential of some already created account
+Please note you can login with this account only if have run seed file in backend.
 
-## Learn More
+<table>
+    <thead>
+        <tr>
+            <td>Email</td>
+            <td>Password</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>regina.pratt12@gmail.com</td>
+            <td>REgina@123$</td>
+        </tr>
+        <tr>
+            <td>shirley.farmer@farm.com</td>
+            <td>iLoVeCaT@36</td>
+        </tr>
+        <tr>
+            <td>ted123@teddy.com</td>
+            <td>IlOvEdOgS@63</td>
+        </tr>
+        <tr>
+            <td>pricillaroberson@outlook.com</td>
+            <td>iHATEBEINGHERE$685</td>
+        </tr>
+        <tr>
+            <td>vanellis@yahoo.com</td>
+            <td>Password@000</td>
+        </tr>
+        <tr>
+            <td>beckyschwartz@gmail.com</td>
+            <td>NUllStory$90</td>
+        </tr>
+    </tbody>
+</table>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Github Repository Link
+https://github.com/parth-paghdal-132/frugal-friend

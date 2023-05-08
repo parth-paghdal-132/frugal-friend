@@ -1,4 +1,4 @@
-import { Delete, Edit, Email, Facebook, Instagram, Key, Notes, Person, Rtt, Twitter, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Delete, Edit, Email, Facebook, Instagram, Key, Notes, Person, Twitter, Visibility, VisibilityOff } from "@mui/icons-material"
 import { Alert, Box, Button, Divider, FormControl, FormHelperText, Grid, IconButton, Input, InputAdornment, InputLabel, Modal, Stack, Typography } from "@mui/material"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import usersValidations from '../helpers/usersValidations'
@@ -126,7 +126,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showErrorData(errorData)
@@ -141,8 +141,12 @@ function MyProfile() {
         setApiCallState({...apiCallState, loading: false, data: data})
         setFirstName(data.firstName)
         setLastName(data.lastName)
-        setBio(data.bio)
-        setImage(`${IMAGE_PATH}${data.image}`)
+        setBio(data.bio ? data.bio : "")
+        if(data.image) {
+            setImage(`${IMAGE_PATH}${data.image}`)
+        } else {
+            setImage("/preview.jpeg")
+        }
         setEmail(data.email)
         setUsername(data.username)
         setFBLink(data.fbLink)
@@ -252,6 +256,7 @@ function MyProfile() {
             setApiCallState({...apiCallState, loading: false})
             if(response && response.data) {
                 setSuccessMessage("Information updated successfully.")
+                setUserToLocalStorage(response.data)
                 fillData(response.data)
                 showErrorData({})
             } else {
@@ -262,7 +267,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showErrorData(errorData)
@@ -293,7 +298,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showPasswordErrorData(errorData)
@@ -323,7 +328,7 @@ function MyProfile() {
             if(exception.response && exception.response.data) {
                 let errorData = exception.response.data
                 if(errorData.sessionExpired){
-                    localStorage.removeItem("token")
+                    removeUserFromLocalStorage()
                     setApiCallState({...apiCallState, navigateToLogin:true})
                 } else {
                     showPasswordErrorData(errorData)
@@ -406,6 +411,18 @@ function MyProfile() {
         }
     }
 
+    function removeUserFromLocalStorage() {
+		localStorage.removeItem("token")
+		localStorage.removeItem("user")
+        window.dispatchEvent(new Event("storage"))
+	}
+
+    function setUserToLocalStorage(user) {
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
+        window.dispatchEvent(new Event("storage"))
+    }
+
     let token = localStorage.getItem("token")
     if(!token) {
         return <Navigate to="/auth/login" state={{otherError: "Please login to make changes in your profile."}}/>
@@ -437,9 +454,9 @@ function MyProfile() {
                             }}>
                             <Box 
                                 component="img" 
-                                src={image} 
-                                sx={{borderRadius:"50%", width:"192px", height:"192px"}}
-                                style={{background: "url(/preview.jpeg) no-repeat scroll 0 0"}}/>
+                                src={image}
+                                alt="your profile picture"
+                                sx={{borderRadius:"50%", width:"192px", height:"192px"}}/>
                             <Box 
                                 sx={{
                                     background:"linear-gradient(0deg, rgba(0,0,0,.8), rgba(0,0,0,0) 85%)",
@@ -520,7 +537,6 @@ function MyProfile() {
                                 value={bio}
                                 onChange={handleBioChange}
                                 aria-describedby="bioInfo"
-                                rows={3}
                                 id="bio"
                                 name="bio"
                                 fullWidth={true}

@@ -1,12 +1,15 @@
 import "../App.css";
-import { Button, createTheme, Grid, Paper, ThemeProvider } from "@mui/material";
+import { createTheme,ThemeProvider, } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
+import Tracking from './Tracking';
 import Home from "./Home";
+import Logout from "./Logout";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
+import Budget from "./Budget";
 // tally Compoent
 import TallyButton from "../Tally/components/TallyButton";
 
@@ -110,7 +113,27 @@ const theme = createTheme({
     fontSize: 16,
   },
 });
+
 function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className="App">
+          <Navbar />
+        </div>
+        <div>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/myProfile" element={<MyProfile />} />
+            <Route path="/user-profile/:userId" element={<UsersProfile />} />
+            <Route path='/Tracking' element={<Tracking />} />
+            <Route path='/budget' element={<Budget />} />
+          </Routes>
+        </div>
+      </Router>
   return (
     <ThemeProvider theme={theme}>
       <Router>

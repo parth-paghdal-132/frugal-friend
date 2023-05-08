@@ -2,15 +2,21 @@ const mongoCollections = require("./config/mongoCollections")
 const connection = require("./config/mongoConnections")
 const bcrypt = require("bcryptjs")
 const { ObjectId } = require("mongodb")
+const client = require('./config/redis');
+
 
 async function main() {
     console.log("Seeding database...")
     const db = await connection.dbConnection()
     await db.dropDatabase()
 
+    client.connect().then(() => {});
     
     const users = mongoCollections.users
     const userCollection = await users()
+
+    const tracking = mongoCollections.tracking;
+    const trackingCollection = await tracking();
 
     let regina = null
     let shirley = null
@@ -95,8 +101,244 @@ async function main() {
     }
     await userCollection.insertOne(becky)
 
+    let shirleyExpense1 = {
+        _id: new ObjectId(),
+        info: {
+            user: {
+                _id: shirley._id,
+                username: shirley.username,
+                email: shirley.email
+            },
+            month: 4,
+            year: 2023
+        },
+        income: [
+            {
+                amount: 2500,
+                description: 'monghtly income',
+                date: "4/23"
+            },
+        ],
+        expense: [
+            {
+                category: 'Entertainment',
+                amount: 20,
+                description: 'Netflix'
+            },
+            {
+                category: 'Food and groceries',
+                amount: 110,
+                description: 'Whole foods'
+            },
+            {
+                category: 'Transportation',
+                amount: 45,
+                description: 'gas'
+            }
+        ],
+        totalExpense: 175,
+        leftToSpend: 1825,
+        savingGoal: 500
+    }
+    await trackingCollection.insertOne(shirleyExpense1);
+
+    let shirleyExpense2 = {
+        _id: new ObjectId(),
+        info: {
+            user: {
+                _id: shirley._id,
+                username: shirley.username,
+                email: shirley.email
+            },
+            month: 5,
+            year: 2023
+        },
+        income: [
+            {
+                amount: 2500,
+                description: 'monghtly income',
+                date: "5/1"
+            },
+        ],
+        expense: [
+            {
+                category: 'Entertainment',
+                amount: 20,
+                description: 'Netflix'
+            },
+            {
+                category: 'Food and groceries',
+                amount: 110,
+                description: 'Whole foods'
+            },
+            {
+                category: 'Transportation',
+                amount: 45,
+                description: 'gas'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 1250,
+                description: 'rent'
+            },
+        ],
+        totalExpense: 1425,
+        leftToSpend: 575,
+        savingGoal: 500
+    }
+    await trackingCollection.insertOne(shirleyExpense2);
+    let shirleyRedis = {
+        username: shirley.username,
+        firstName: shirley.firstName,
+        lastName: shirley.lastName,
+        image: shirley.image,
+    }
+    await client.zAdd('mostPoints', {
+        score: 25,
+        value: JSON.stringify(shirleyRedis)
+    });
+    
+
+    let reginaExpense1 = {
+        _id: new ObjectId(),
+        info: {
+            user: {
+                _id: regina._id,
+                username: regina.username,
+                email: regina.email
+            },
+            month: 4,
+            year: 2023
+        },
+        income: [
+            {
+                amount: 2000,
+                description: 'monghtly income',
+                date: "4/13"
+            }
+        ],
+        expense: [
+            {
+                category: 'Entertainment',
+                amount: 20,
+                description: 'Mario Movie tickets'
+            },
+            {
+                category: 'Food and groceries',
+                amount: 110,
+                description: 'Shoprite run'
+            },
+            {
+                category: 'Transportation',
+                amount: 45,
+                description: 'gas'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 1200,
+                description: 'rent'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 110,
+                description: 'gas and electric'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 25,
+                description: 'internet'
+            }
+        ],
+        totalExpense: 1510,
+        leftToSpend: 90,
+        savingGoal: 400
+    }
+    await trackingCollection.insertOne(reginaExpense1);
+    let reginaRedis = {
+        username: regina.username,
+        firstName: regina.firstName,
+        lastName: regina.lastName,
+        image: regina.image,
+    }
+    await client.zAdd('mostPoints', {
+        score: 15,
+        value: JSON.stringify(reginaRedis)
+    });
+
+    let tedExpense1 = {
+        _id: new ObjectId(),
+        info: {
+            user: {
+                _id: ted._id,
+                username: ted.username,
+                email: ted.email
+            },
+            month: 5,
+            year: 2023
+        },
+        income: [
+            {
+                amount: 5000,
+                description: 'monghtly income',
+                date: "5/1"
+            }
+        ],
+        expense: [
+            {
+                category: 'Entertainment',
+                amount: 60,
+                description: 'Concert'
+            },
+            {
+                category: 'Food and groceries',
+                amount: 600,
+                description: 'Kings'
+            },
+            {
+                category: 'Transportation',
+                amount: 110,
+                description: 'gas'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 2000,
+                description: 'rent'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 220,
+                description: 'gas and electric'
+            },
+            {
+                category: 'Housing and utilities',
+                amount: 55,
+                description: 'internet'
+            },
+            {
+                category: 'Entertainment',
+                amount: 15,
+                description: 'spotify'
+            }
+        ],
+        totalExpense: 3060,
+        leftToSpend: 1140,
+        savingGoal: 800
+    }
+    await trackingCollection.insertOne(tedExpense1);
+    let tedRedis = {
+        username: ted.username,
+        firstName: ted.firstName,
+        lastName: ted.lastName,
+        image: ted.image,
+    }
+    await client.zAdd('mostPoints', {
+        score: 16,
+        value: JSON.stringify(tedRedis)
+    });
+
 
     await connection.closeConnection()
+    await client.disconnect();
     console.log("Seeding done!")
 }
 
