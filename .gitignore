@@ -3,7 +3,10 @@
 # dependencies
 /node_modules
 /backend/node_modules
-/backend/uploads
+/backend/uploads/images/*
+!/backend/uploads/images/*.js
+/backend/uploads/thumbs/*
+!/backend/uploads/thumbs/*.js
 /.pnp
 .pnp.js
 
@@ -23,3 +26,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.idea/
+data
+*.log
+package-lock.json
+package-lock.json
+package-lock.json
+package-lock.json
