@@ -8,7 +8,7 @@ import Home from "./Home";
 import MyProfile from "./MyProfile";
 import UsersProfile from "./UsersProfile";
 // tally Compoent
-import TallyButton from "./Tally/TallyButton";
+import TallyButton from "../Tally/components/TallyButton";
 
 const theme = createTheme({
   palette: {
@@ -122,7 +122,7 @@ function App() {
         <div>
           <Routes>
             <Route exact path="/" element={<Home />}>
-              {/* <Route index element={<TallyButton />} /> */}
+              <Route index element={<TallyButton />} />
             </Route>
             <Route path="/auth/signup" element={<Signup />} />
             <Route path="/auth/login" element={<Login />} />
