@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setInput,
   setDecimal,
   setBackspace,
   setEnter,
+  setCategory,
+  setDescribe,
+  loadAllData,
+  setSentence,
 } from "../redux/NumberPadSlice";
 import SingleButton from "./SingleButton";
 import { convertToNumber } from "../helpers/NumberPadHelp";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import "./styles.css";
-
+import axiosInstance from "../../config/axiosConfig";
 const NumberPad = () => {
   const value = useSelector((state) => state.numberPad.value);
   const decimal = useSelector((state) => state.numberPad.decimal);
+  const selectedCategory = useSelector((state) => state.numberPad.category);
+  const expenseDescription = useSelector((state) => state.numberPad.describe);
+  const allData = useSelector((state) => state.numberPad.allData);
+  const sentence = useSelector((state) => state.numberPad.sentence);
   const dispatch = useDispatch();
 
   const handleButtonClick = (e) => {
@@ -193,6 +201,71 @@ const NumberPad = () => {
     dispatch(setInput(result));
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const sessionData = allData.sessionDate;
+    const budgetData = allData.budgetData;
+    if (sessionData === null) {
+      try {
+        dispatch(loadAllData());
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    if (sessionData === null) {
+      dispatch(
+        setSentence({
+          er: true,
+          en: "You need to login before add expense",
+        })
+      );
+      // return alert("You need to login before add expense");
+    }
+    if (!budgetData) {
+      dispatch(
+        setSentence({
+          er: true,
+          en: "You need to set goal for current month before add expense",
+        })
+      );
+      // alert("You need set goal for current month before add expense");
+    }
+
+    if (selectedCategory && value !== "0") {
+      try {
+        const response = await axiosInstance.post("/api/add-expense", {
+          userId: sessionData._id,
+          category: selectedCategory,
+          amount: value,
+          description: expenseDescription,
+        });
+        dispatch(
+          setSentence({
+            er: false,
+            en: "Add Expense Successfully, you have been awarded 1 point!",
+          })
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (value === "0") {
+      dispatch(
+        setSentence({
+          er: true,
+          en: "Please enter a valid number for Amount.",
+        })
+      );
+    } else {
+      dispatch(
+        setSentence({
+          er: true,
+          en: "Please select a category.",
+        })
+      );
+    }
+  };
+
   const buttons = [
     "1",
     "2",
@@ -210,30 +283,104 @@ const NumberPad = () => {
     "0",
     ".",
     "=",
-  ].map((item) => <SingleButton item={item} onClick={handleButtonClick} />);
+  ].map((item) => (
+    <SingleButton
+      item={item}
+      type={item !== "Enter" ? "button" : "Submit"}
+      onClick={item !== "Enter" ? handleButtonClick : handleSubmit}
+    />
+  ));
+
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+
+    dispatch(setCategory(value));
+  };
+
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+
+    dispatch(setDescribe(value));
+  };
+
+  useEffect(() => {
+    dispatch(loadAllData());
+  }, []);
 
   return (
     <Container>
-      <h1>Value: {value}</h1>
-      <Row>
-        <Col xs={12}>
-          <Form.Group controlId="number-pad-input">
-            <Form.Control
-              type="text"
-              readOnly
-              value={value}
-              className="number-pad-input"
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        {buttons.map((button, index) => (
-          <Col key={index} xs={3} className="my-1">
-            {button}
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col xs={12}>
+            <Form.Group controlId="category-selector">
+              <Row>
+                <Col xs={3} className="d-flex align-items-center">
+                  <Form.Label>Category</Form.Label>
+                </Col>
+                <Col xs={9}>
+                  <Form.Select
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                  >
+                    <option value="">Select category</option>
+                    <option value="Food and groceries">
+                      Food and groceries
+                    </option>
+                    <option value="Housing and utilities">
+                      Housing and utilities
+                    </option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Personal care">Personal care</option>
+                    <option value="Entertainment"> "Entertainment"</option>
+                    {/* Add more categories as needed */}
+                  </Form.Select>
+                </Col>
+              </Row>
+            </Form.Group>
           </Col>
-        ))}
-      </Row>
+          <Col xs={12}>
+            <Form.Group controlId="description-input">
+              <Row>
+                <Col xs={3} className="d-flex align-items-center">
+                  <Form.Label>Description</Form.Label>
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="text"
+                    value={expenseDescription}
+                    onChange={handleDescriptionChange}
+                  />
+                </Col>
+              </Row>
+            </Form.Group>
+          </Col>
+
+          <Col xs={12}>
+            <Form.Group controlId="number-pad-input">
+              <Row>
+                <Col xs={3} className="d-flex align-items-center">
+                  <Form.Label>Amount</Form.Label>
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="text"
+                    readOnly
+                    value={value}
+                    className="number-pad-input"
+                  />
+                </Col>
+              </Row>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          {buttons.map((button, index) => (
+            <Col key={index} xs={3} className="my-1">
+              {button}
+            </Col>
+          ))}
+        </Row>
+      </Form>
     </Container>
   );
 };
