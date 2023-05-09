@@ -346,8 +346,7 @@ const NumberPad = () => {
                     </option>
                     <option value="Transportation">Transportation</option>
                     <option value="Personal care">Personal care</option>
-                    <option value="Entertainment"> "Entertainment"</option>
-                    {/* Add more categories as needed */}
+                    <option value="Entertainment"> Entertainment</option>
                   </Form.Select>
                 </Col>
               </Row>
