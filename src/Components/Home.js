@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   TableContainer,
   Table,
@@ -19,8 +20,9 @@ import axiosInstance from "../config/axiosConfig";
 import { Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../Tally/redux/store";
-function createData(rank, username, points) {
-  return { rank, username, points };
+
+function createData(rank, username, points, userId) {
+  return { rank, username, points, userId };
 }
 
 const mostPoints = async () => {
@@ -35,7 +37,7 @@ const mostPoints = async () => {
 
   const rows = [];
   for (let i = 0; i < data.length; i++) {
-    rows.push(createData(i, data[i].username, data[i].points));
+    rows.push(createData(i, data[i].username, data[i].points, data[i].userId));
   }
   return rows;
 };
@@ -284,7 +286,13 @@ export default function Home() {
                   <TableCell component="th" scope="row">
                     {row.rank + 1}
                   </TableCell>
-                  <TableCell>{row.username}</TableCell>
+
+                  <TableCell>
+                    {" "}
+                    <Link to={`/user-profile/${row.userId}`}>
+                      {row.username}
+                    </Link>
+                  </TableCell>
                   <TableCell>{row.points}</TableCell>
                 </TableRow>
               ))}
