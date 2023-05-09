@@ -289,9 +289,13 @@ export default function Home() {
 
                   <TableCell>
                     {" "}
-                    <Link to={`/user-profile/${row.userId}`}>
-                      {row.username}
-                    </Link>
+                    {row.userId === user._id ? (
+                      <Link to={`/myprofile`}>{row.username}</Link>
+                    ) : (
+                      <Link to={`/user-profile/${row.userId}`}>
+                        {row.username}
+                      </Link>
+                    )}
                   </TableCell>
                   <TableCell>{row.points}</TableCell>
                 </TableRow>
