@@ -32,13 +32,15 @@ const updateProfile = async (image, thumb, firstName, lastName, bio, username, f
         }
     }
 
+
     // update stored user in redis
     let userToUpdate = {
+        userId: userFromDB._id.toString(),
         username: username,
         firstName: firstName,
         lastName: lastName,
     }
-
+    
     if(isProfilePictureChanged){
         userToUpdate.image = image
     }

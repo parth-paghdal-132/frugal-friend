@@ -37,6 +37,7 @@ const setReward = async (userId, type, month) => {
   // need to update user object in redis when image is updated
 
   const userInfo = {
+    userId: userId,
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -66,6 +67,7 @@ const setReward = async (userId, type, month) => {
 
 const updateUserInRedis = async (oldUser, newUser) => {
   let findUser = {
+    userId: oldUser._id.toString(),
     username: oldUser.username,
     firstName: oldUser.firstName,
     lastName: oldUser.lastName,
