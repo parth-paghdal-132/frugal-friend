@@ -194,13 +194,17 @@ export default function Home() {
                 alt="user profile picture"
                 src={getUserProfilePicture(user)}
                 sx={{ width: 50, height: 50 }}
+                aria-label="User profile picture"
               />
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 Hello, {user.username}! <br />
                 Today is {new Date().toLocaleDateString()}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography
+                variant="body2"
+                aria-label="Your saving goal is ${savingGoal} this month."
+              >
                 Your saving goal is ${savingGoal} this month.
               </Typography>
 
@@ -214,6 +218,7 @@ export default function Home() {
                 onClick={() => {
                   window.location.href = "/myProfile";
                 }}
+                aria-label="Go to My Profile"
               ></Button>
             </CardActions>
           </Card>
@@ -228,7 +233,11 @@ export default function Home() {
             }}
           >
             <CardContent>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              <Typography
+                sx={{ mb: 1.5 }}
+                color="text.secondary"
+                aria-label={`Your points: ${points}`}
+              >
                 Your points: {points}
               </Typography>
             </CardContent>
@@ -238,6 +247,7 @@ export default function Home() {
                 onClick={() => {
                   window.location.href = "/myProfile";
                 }}
+                aria-label="Go to My Profile"
               ></Button>
             </CardActions>
           </Card>
