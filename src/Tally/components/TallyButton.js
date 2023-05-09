@@ -24,12 +24,22 @@ const TallyButton = () => {
 
   return (
     <div>
-      <Modal show={showTallyView} onHide={handleModalClose} centered>
+      <Modal
+        show={showTallyView}
+        onHide={handleModalClose}
+        centered
+        aria-labelledby="tallyViewModalTitle"
+      >
         <Modal.Body>
           <TallyView />
         </Modal.Body>
       </Modal>
-      <Button variant="primary" onClick={handleClick} className="appear-button">
+      <Button
+        variant="primary"
+        onClick={handleClick}
+        className="appear-button"
+        aria-label={!showTallyView ? "Open Tally View" : "Close Tally View"}
+      >
         {!showTallyView ? (
           <AddIcon className="button-img" />
         ) : (

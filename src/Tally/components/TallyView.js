@@ -13,6 +13,7 @@ const TallyView = () => {
           role="alert"
           aria-live="assertive"
           aria-atomic="true"
+          aria-label={`Alert: ${sentence.en}`}
         >
           {sentence.en}
         </Alert>

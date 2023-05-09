@@ -290,7 +290,7 @@ function Budget() {
         )}
 
 
-      <h1 style={{textAlign: 'center'}}>Yearly Summaries</h1>
+      <h2 style={{textAlign: 'center'}}>Yearly Summaries</h2>
       {isLoading ? (
         <div> Loading... </div>
       ) : (

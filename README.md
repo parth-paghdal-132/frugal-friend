@@ -125,5 +125,14 @@ Please note you can login with this account only if have run seed file in backen
     </tbody>
 </table>
 
+## To view email budgets that are sent to use from budget page
+go to https://ethereal.email/
+go to login
+
+email: drake89@ethereal.email
+password: MmWReUxfnUfsGxKe2U
+
+Once logged in, click messages to view emails
+
 ## Github Repository Link
 https://github.com/parth-paghdal-132/frugal-friend
