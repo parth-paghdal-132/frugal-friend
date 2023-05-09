@@ -6,7 +6,7 @@ const TallyView = () => {
   const sentence = useSelector((state) => state.numberPad.sentence);
   return (
     <div>
-      <h1>Tally</h1>
+      <h1>Add Expense</h1>
       {sentence.en && (
         <Alert
           variant={sentence.er ? "danger" : "success"}
