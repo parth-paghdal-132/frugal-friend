@@ -103,13 +103,14 @@ export default function Home() {
   async function fetchData() {
     setApiCallState({ ...apiCallState, loading: true });
     try {
-      const response = await axiosInstance.get("/api/session");
+      const response = await axiosInstance.get("/myprofile");
       try {
         const rows = await mostPoints();
         setRows(rows);
 
         const response = await axiosInstance.get("/api/session");
         console.log(response.data);
+        setUser(response.data);
         const summaryDataRes = await axiosInstance.post("/api/summary-data", {
           userId: response.data._id,
         });
