@@ -1,38 +1,39 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setShowTallyView } from "../redux/TallyButtonSlice";
+import { setShowTallyView, setReset } from "../redux/TallyButtonSlice";
 import TallyView from "./TallyView";
 import { Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
 const TallyButton = () => {
   const showTallyView = useSelector((state) => state.tallyButton.showTallyView);
+  const reset = useSelector((state) => state.tallyButton.reset);
   const dispatch = useDispatch();
 
   const handleClick = () => {
     dispatch(setShowTallyView());
   };
 
+  const handleModalClose = () => {
+    dispatch(setReset());
+    handleClick();
+  };
+
   return (
     <div>
-      <Modal show={showTallyView} onHide={handleClick} centered>
+      <Modal show={showTallyView} onHide={handleModalClose} centered>
         <Modal.Body>
           <TallyView />
         </Modal.Body>
       </Modal>
       <Button variant="primary" onClick={handleClick} className="appear-button">
         {!showTallyView ? (
-          <img
-            className="button-img"
-            src="https://img.icons8.com/ios/50/000000/plus-math.png"
-            alt="display tally view"
-          />
+          <AddIcon className="button-img" />
         ) : (
-          <img
-            className="button-img"
-            src="https://img.icons8.com/ios/50/000000/minus-math.png"
-            alt="hide tally view"
-          />
+          <RemoveIcon className="button-img" />
         )}
       </Button>
     </div>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   showTallyView: false,
+  reset: false,
 };
 
 const tallyButtonSlice = createSlice({
@@ -11,8 +12,11 @@ const tallyButtonSlice = createSlice({
     setShowTallyView: (state) => {
       state.showTallyView = !state.showTallyView;
     },
+    setReset: (state) => {
+      state.reset = !state.reset;
+    },
   },
 });
 
-export const { setShowTallyView } = tallyButtonSlice.actions;
+export const { setShowTallyView, setReset } = tallyButtonSlice.actions;
 export default tallyButtonSlice.reducer;

@@ -10,6 +10,7 @@ import {
   loadAllData,
   setSentence,
 } from "../redux/NumberPadSlice";
+import { setReset } from "../redux/TallyButtonSlice";
 import SingleButton from "./SingleButton";
 import { convertToNumber } from "../helpers/NumberPadHelp";
 import { Container, Row, Col, Form } from "react-bootstrap";
@@ -22,6 +23,7 @@ const NumberPad = () => {
   const expenseDescription = useSelector((state) => state.numberPad.describe);
   const allData = useSelector((state) => state.numberPad.allData);
   const sentence = useSelector((state) => state.numberPad.sentence);
+  const reset = useSelector((state) => state.tallyButton.reset);
   const dispatch = useDispatch();
 
   const handleButtonClick = (e) => {
@@ -247,7 +249,12 @@ const NumberPad = () => {
           })
         );
       } catch (error) {
-        console.error(error);
+        dispatch(
+          setSentence({
+            er: true,
+            en: "Add Expense Failed",
+          })
+        );
       }
     } else if (value === "0") {
       dispatch(
@@ -304,8 +311,16 @@ const NumberPad = () => {
   };
 
   useEffect(() => {
+    if (reset) {
+      dispatch(setInput("0"));
+      dispatch(setDecimal(false));
+      dispatch(setCategory(""));
+      dispatch(setDescribe(""));
+      dispatch(setSentence({ er: false, en: "Happy Talling" }));
+      dispatch(setReset());
+    }
     dispatch(loadAllData());
-  }, []);
+  }, [reset]);
 
   return (
     <Container>
