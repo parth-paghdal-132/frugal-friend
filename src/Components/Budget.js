@@ -52,7 +52,7 @@ function Budget() {
           "Food and groceries": 0,
           "Housing and utilities": 0,
           "Transportation": 0,
-          "Personal Care": 0,
+          "Personal care": 0,
           "Entertainment": 0
         }
 
