@@ -12,8 +12,6 @@ import {
   Avatar,
   Card,
   CardContent,
-  CardActions,
-  Button,
   Grid,
 } from "@mui/material";
 import "../Home.css";
@@ -208,14 +206,6 @@ export default function Home() {
                 You have ${totalIncome} incomes this month.
               </Typography>
             </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                onClick={() => {
-                  window.location.href = "/myProfile";
-                }}
-              ></Button>
-            </CardActions>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -232,14 +222,6 @@ export default function Home() {
                 Your points: {points}
               </Typography>
             </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                onClick={() => {
-                  window.location.href = "/myProfile";
-                }}
-              ></Button>
-            </CardActions>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
