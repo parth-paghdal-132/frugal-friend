@@ -11,6 +11,7 @@ async function main() {
     await db.dropDatabase()
 
     client.connect().then(() => {});
+    await client.flushDb();
     
     const users = mongoCollections.users
     const userCollection = await users()
@@ -188,6 +189,7 @@ async function main() {
     }
     await trackingCollection.insertOne(shirleyExpense2);
     let shirleyRedis = {
+        userId: shirley._id,
         username: shirley.username,
         firstName: shirley.firstName,
         lastName: shirley.lastName,
@@ -255,6 +257,7 @@ async function main() {
     }
     await trackingCollection.insertOne(reginaExpense1);
     let reginaRedis = {
+        userId: regina._id,
         username: regina.username,
         firstName: regina.firstName,
         lastName: regina.lastName,
@@ -326,6 +329,7 @@ async function main() {
     }
     await trackingCollection.insertOne(tedExpense1);
     let tedRedis = {
+        userId: ted._id,
         username: ted.username,
         firstName: ted.firstName,
         lastName: ted.lastName,
