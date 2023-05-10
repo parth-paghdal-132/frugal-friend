@@ -1,0 +1,31 @@
+{
+  "name": "frugal_friend_backend",
+  "version": "1.0.0",
+  "description": "this is backend for our app frugal friend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "watch": "nodemon ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node seed.js"
+  },
+  "author": "Group Hawk",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.20.2",
+    "ckey": "^1.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "gm": "^1.25.0",
+    "mongodb": "^5.1.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
+    "nodemon": "^2.0.22",
+    "redis": "^4.6.5",
+    "xss": "^1.0.14"
+  }
+}

@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+    # Mongodb servive
+    mongo_db:
+        image: mongo
+        restart: always
+        volumes:
+            - mongo_db_data:/data/db
+        ports:
+            - "27017:27017"
+    imagemagick:
+        image: dpokidov/imagemagick:latest
+    redis:
+        image: redislabs/redismod
+        ports:
+            - "6379:6379"
+    frontend:
+        build: ./
+        container_name: frontend_container
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/app/frontend
+            - /app/frontend/node_modules
+        depends_on:
+            - backend
+    backend:
+        build: ./backend
+        container_name: backend_container
+        ports:
+            - "4000:4000"
+        volumes:
+            - ./backend:/app/backend
+            - /app/backend/node_modules
+        depends_on:
+            - mongo_db
+            - redis
+        environment:
+            - MONGO_URL=mongodb://mongo_db:27017
+            - IMAGEMAGICK=true
+            - REDIS_URL=redis://redis:6379
+        command: bash -c "npm run seed && npm start"
+volumes:
+    mongo_db_data:
+    

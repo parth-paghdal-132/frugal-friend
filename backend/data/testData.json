@@ -1,0 +1,83 @@
+// test data for postman
+
+{
+    "_id": ObjectId("61764301ae78850ff5c4581d"),
+    "info": {
+        "user": {
+            "_id": ObjectId("61763fd3ae78850ff5c4581c"),
+            "username":"johndoe",
+            "email":"johndoe@example.com"
+        },
+        "month": 4,
+        "year": 2023
+    },
+    "income": [
+        {
+            "amount": 3000,
+            "description": "normal wage",
+            "date": "4/12"
+        },
+        {
+            "amount":4000,
+            "description": "stock interest",
+            "date": "4/25"
+        },
+        {
+            "amount": 2800,
+            "description": "stock market crash",
+            "date": "4/14"
+        }
+    ],
+    "expense":[
+        {   "_id": ObjectId("61764353ae78850ff5c4581e"),
+            "amount":25,
+            "category": "Food and groceries",
+            "description":"lunch",
+            "date": "4/3"
+        },
+        {
+            "_id": ObjectId("6176443dae78850ff5c4581f"),
+            "amount":1000,
+            "category": "Housing and utilities",
+            "description":"give the rent",
+            "date": "4/10"
+
+        }
+    ],
+    "totalExpense": 1025,
+    "points": 130,
+    "leftToSpend" :775,
+    "savingGoal" : 1000
+}
+
+// test for add new saving gaol
+{   
+    "userId": "6166e35bdf192bd2606c10fa",
+    "estimatedIncome": 3000,
+    "savingGoal": 1000,
+    "month": "April"
+    
+}
+
+// test for add expense 
+{   
+    "userId": "6166e35bdf192bd2606c10fa",
+    "amount": 20,
+    "category": "Food and groceries",
+    "description": "Taco"
+    
+}
+
+// test for update income for previous goals
+{
+    "userId": "6166e35bdf192bd2606c10fa",
+    "updatedIncome": 5000,
+    "description": "earn by part-time job",
+    "updatedMonth": "April"
+}
+
+// test for get budget data 
+
+{
+    "userId": "6166e35bdf192bd2606c10fa"
+}
