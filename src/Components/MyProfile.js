@@ -676,7 +676,7 @@ function MyProfile() {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         { isPasswordSet ? "Change Password" : "Set Password"}
                     </Typography>
-                    <Typography id="modal-modal-description" variant="subtitle1">
+                    <Typography id="modal-modal-description" variant="subtitle1" component="h3">
                         { isPasswordSet ? 
                             "Update your current password." :
                             "Set your new password so you can login with your email and password only."

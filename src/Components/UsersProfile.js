@@ -137,10 +137,10 @@ function UsersProfile() {
                         <Typography variant="h6" sx={{mt:3}} component="h3">Connect with me</Typography>
                         <Box style={boxStyle}>
                             <ul>
-                                <li><a href={`mailto:${email}`} target="_blank">{email}</a></li>
-                                { fbLink &&<li><a href={fbLink} target="_blank">{fbLink}</a></li> }
-                                { igLink &&<li><a href={igLink} target="_blank">{igLink}</a></li> }
-                                { twitterLink &&<li><a href={twitterLink} target="_blank">{twitterLink}</a></li> }
+                                <li><a href={`mailto:${email}`} target="_blank" style={{color:"#0068c4"}}>{email}</a></li>
+                                { fbLink &&<li><a href={fbLink} target="_blank" style={{color:"#0068c4"}}>{fbLink}</a></li> }
+                                { igLink &&<li><a href={igLink} target="_blank" style={{color:"#0068c4"}}>{igLink}</a></li> }
+                                { twitterLink &&<li><a href={twitterLink} target="_blank" style={{color:"#0068c4"}}>{twitterLink}</a></li> }
                             </ul>
                         </Box>
                     </Grid>
