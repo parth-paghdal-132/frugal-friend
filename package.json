@@ -2,6 +2,7 @@
   "name": "frugal_friend",
   "version": "0.1.0",
   "private": true,
+  "author": "Group Hawk",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
