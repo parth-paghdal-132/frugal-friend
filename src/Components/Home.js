@@ -197,7 +197,8 @@ export default function Home() {
                 aria-label="User profile picture"
               />
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Hello, {user.username}! <br />
+                Hello, {user.username ? user.username : user.firstName}
+                <br />
                 Today is {new Date().toLocaleDateString()}
               </Typography>
 
@@ -254,13 +255,13 @@ export default function Home() {
       <br />
       <br />
       <div className="table">
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{ flexGrow: 1, textAlign: "center" }}
-          >
-            Top 10 users with most points
-          </Typography>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ flexGrow: 1, textAlign: "center" }}
+        >
+          Top 10 users with most points
+        </Typography>
 
         <TableContainer component={Paper}>
           <Table
