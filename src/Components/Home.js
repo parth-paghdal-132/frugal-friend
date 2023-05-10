@@ -254,7 +254,6 @@ export default function Home() {
       <br />
       <br />
       <div className="table">
-        <h2>
           <Typography
             variant="h5"
             component="div"
@@ -262,7 +261,6 @@ export default function Home() {
           >
             Top 10 users with most points
           </Typography>
-        </h2>
 
         <TableContainer component={Paper}>
           <Table
